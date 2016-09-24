@@ -1,3 +1,7 @@
+.container {
+    max-width: 1000px;
+}
+
 .ui-autocomplete {
     position: absolute;
     top: 100%;
