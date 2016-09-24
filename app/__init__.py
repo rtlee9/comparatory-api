@@ -89,8 +89,8 @@ def index():
                 on d.id = n.id
             inner join company_dets s
                 on n.sim_id = s.id
-            where replace(upper(d.COMPANY_CONFORMED_NAME), \' \', \'\') like
-                \'%""" + cname.upper().replace(' ', '') + """%\'
+            where replace(upper(d.COMPANY_CONFORMED_NAME), \' \', \'\') =
+                \'""" + cname.upper().replace(' ', '') + """\'
             """
 
             cursor.execute(query)
