@@ -1,10 +1,11 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask import jsonify
 import psycopg2
 from elasticsearch import Elasticsearch
 from flask_bootstrap import Bootstrap
+import auth.http_basic as auth
+
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -49,6 +50,7 @@ def autocomplete():
 
 
 @app.route('/', methods=['GET', 'POST'])
+@auth.requires_auth
 def index():
     errors = []
     results = []
