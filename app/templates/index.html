@@ -1,0 +1,50 @@
+{% extends "bootstrap/base.html" %}
+{% block html_attribs %} lang="en"{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block head %}
+{% block title %} <title>Wordcount</title>{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="/static/main.css">
+{% endblock %}
+
+{% block metas %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>***REMOVED***</h1>
+  <h3>Search by company name</h3>
+  <form role="form" method='POST' action='/'>
+    <div class="form-group">
+      <input type="text" name="company-name" class="form-control" id="cname-box" placeholder="Enter company name" style="max-width: 300px;" autofocus required>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+  <br>
+  <div id="searchfield">
+
+    {% for error in errors %}
+    <h4>{{ error }}</h4>
+    {% endfor %}
+    {% for result in results %}
+    <h4>{{ result }}</h4>
+    {% endfor %}
+  </div>
+
+  {% block scripts %}
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="/static/autocomplete.js"></script>
+  {% endblock %}
+  {% endblock %}

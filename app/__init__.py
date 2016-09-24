@@ -4,8 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 import psycopg2
 from elasticsearch import Elasticsearch
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+Bootstrap(app)
+
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -114,6 +117,12 @@ def index():
             )
 
     return render_template('index.html', errors=errors, results=results)
+
+
+# Sample HTTP error handling
+@app.errorhandler(404)
+def not_found(error):
+        return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
