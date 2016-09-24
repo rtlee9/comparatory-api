@@ -1,19 +1,37 @@
 from app import db
-from sqlalchemy.dialects.postgresql import JSON
 
 
-class Result(db.Model):
-    __tablename__ = 'results'
+class Company(db.Model):
+    __tablename__ = 'company_dets'
+    __searchable__ = ['company_conformed_name']
 
     id = db.Column(db.Integer, primary_key=True)
-    query = db.Column(db.String())
-    match = db.Column(JSON)
-    result = db.Column(JSON)
+    sic_cd = db.Column(db.String(4))
+    company_conformed_name = db.Column(db.String())
+    business_description = db.Column(db.String())
 
-    def __init__(self, query, match, result):
-        self.query = query
-        self.match = match
-        self.result = result
+    def __init__(self, id, sic_cd, company_conformed_name,
+                 business_description):
+        self.id = id
+        self.sic_cd = sic_cd
+        self.company_conformed_name = company_conformed_name
+        self.business_description = business_description
 
     def __repr__(self):
-        return '<id {}: {}>'.format(self.id, self.query)
+        return '<id {}: {}>'.format(self.id, self.company_conformed_name)
+
+
+class Sim(db.Model):
+    __tablename__ = 'sims'
+
+    id = db.Column(db.String(), primary_key=True)
+    sim_id = db.Column(db.String(), db.ForeignKey('sim.id'))
+    sim_score = db.Column(db.Integer())
+
+    def __init__(self, id, sim_id, sim_score):
+        self.id = id
+        self.sim_id = sim_id
+        self.sim_score = sim_score
+
+    def __repr__(self):
+        return '<id {}: sim_id {}>'.format(self.id, self.sim_id)
