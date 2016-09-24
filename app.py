@@ -1,7 +1,9 @@
 import os
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask import jsonify
 import psycopg2
+from elasticsearch import Elasticsearch
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -19,6 +21,28 @@ try:
 except psycopg2.DatabaseError:
     if conn:
         conn.rollback()
+
+# Connnect to AWS elasticsearch
+es_local = Elasticsearch('localhost')
+es_aws = Elasticsearch(
+    '***REMOVED***\
+    amazonaws.com/', verify_certs=True)
+
+
+@app.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    max_results = 10
+    target_name = "american internatonal group"
+    target_name = request.args.get('q')
+    query = {"query": {"match": {
+        "dets.COMPANY CONFORMED NAME": target_name}},
+        "_source": "dets.COMPANY CONFORMED NAME", "size": max_results}
+    resp = es_local.search('comparatory', 'company', query)['hits']['hits']
+    assert len(resp) <= max_results
+
+    names = [d['_source']['dets']
+             ['COMPANY CONFORMED NAME'].upper() for d in resp]
+    return jsonify(matching_results=names)
 
 
 @app.route('/', methods=['GET', 'POST'])
