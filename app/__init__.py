@@ -29,8 +29,8 @@ except psycopg2.DatabaseError:
 # Connnect to AWS elasticsearch
 es_local = Elasticsearch('localhost')
 es_aws = Elasticsearch(
-    '***REMOVED***\
-    amazonaws.com/', verify_certs=True)
+    '***REMOVED***'
+    'amazonaws.com/', verify_certs=True)
 
 
 @app.route('/autocomplete', methods=['GET'])
@@ -41,7 +41,7 @@ def autocomplete():
     query = {"query": {"match": {
         "dets.COMPANY CONFORMED NAME": target_name}},
         "_source": "dets.COMPANY CONFORMED NAME", "size": max_results}
-    resp = es_local.search('comparatory', 'company', query)['hits']['hits']
+    resp = es_aws.search('comparatory', 'company', query)['hits']['hits']
     assert len(resp) <= max_results
 
     names = [d['_source']['dets']
