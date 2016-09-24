@@ -101,7 +101,7 @@ def index():
                 'Showing results for ' +
                 primary_name + ' [' + top_sims[0][2] + ']')
 
-            for i in range(3):
+            for i in range(5):
                 next_b = top_sims[i]
                 next_name = next_b[13].upper().replace('&AMP;', '&')
                 results.append(
