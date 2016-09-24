@@ -4,8 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 import psycopg2
 from elasticsearch import Elasticsearch
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+Bootstrap(app)
+
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
