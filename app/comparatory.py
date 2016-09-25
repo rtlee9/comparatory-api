@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 from elasticsearch import Elasticsearch, RequestsHttpConnection
@@ -10,7 +10,6 @@ import auth.http_basic as auth
 
 app = Flask(__name__)
 Bootstrap(app)
-
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -18,38 +17,54 @@ db = SQLAlchemy(app)
 AWS_RDS_HOST = os.environ['AWS_RDS_HOST']
 AWS_RDS_USER = os.environ['AWS_RDS_USER']
 AWS_RDS_PASSWORD = os.environ['AWS_RDS_PASSWORD']
-
 AWS_ES_ACCESS_KEY = os.environ['***REMOVED***']
 AWS_ES_SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 
+
 # Connect to AWS RDS
-try:
+def _connect_db():
     conn_string = "host='" + AWS_RDS_HOST + \
                   "' dbname='comparatory' user='" + AWS_RDS_USER + \
                   "' password='" + AWS_RDS_PASSWORD + "'"
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    return conn.cursor()
 
-except psycopg2.DatabaseError:
-    if conn:
-        conn.rollback()
 
 # Connnect to AWS elasticsearch
-es_local = Elasticsearch('localhost')
-host = os.environ['ES_HOST']
-awsauth = AWS4Auth(AWS_ES_ACCESS_KEY, AWS_ES_SECRET_KEY,
-                   'us-east-1', 'es')
-es = Elasticsearch(
-    hosts=[host],
-    http_auth=awsauth,
-    use_ssl=True,
-    verify_certs=True,
-    connection_class=RequestsHttpConnection
-)
+def _connect_es():
+    host = os.environ['ES_HOST']
+    awsauth = AWS4Auth(AWS_ES_ACCESS_KEY, AWS_ES_SECRET_KEY,
+                       'us-east-1', 'es')
+    es = Elasticsearch(
+        hosts=[host],
+        http_auth=awsauth,
+        use_ssl=True,
+        verify_certs=True,
+        connection_class=RequestsHttpConnection
+    )
+    return es
+
+
+# Opens a new elasticsearch connection if there is none yet for the
+# current application context
+def get_es():
+    if not hasattr(g, 'es_node'):
+        g.es_node = _connect_es()
+    return g.es_node
+
+
+# Opens a new database connection if there is none yet for the
+# current application context
+def get_db():
+    if not hasattr(g, 'psql_db'):
+        g.psql_db = _connect_db()
+    return g.psql_db
+
 
 
 @app.route('/autocomplete', methods=['GET'])
 def autocomplete(max_results=10):
+    es = get_es()
     target_name = request.args.get('q')
     query = {"query": {"match": {
         "dets.COMPANY CONFORMED NAME": target_name}},
@@ -65,12 +80,15 @@ def autocomplete(max_results=10):
 @app.route('/', methods=['GET', 'POST'])
 @auth.requires_auth
 def index():
+
+    es = get_es()
+    cursor = get_db()
+
     errors = []
     results = []
     if request.method == "POST":
 
         try:
-
             # User entry: get company name
             cname = request.form['company-name']
 

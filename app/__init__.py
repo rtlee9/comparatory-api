@@ -1,1 +1,1 @@
-from app import comparatory
+from comparatory import app
