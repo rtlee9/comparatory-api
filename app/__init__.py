@@ -34,9 +34,7 @@ es_aws = Elasticsearch(
 
 
 @app.route('/autocomplete', methods=['GET'])
-def autocomplete():
-    max_results = 10
-    target_name = "american internatonal group"
+def autocomplete(max_results=10):
     target_name = request.args.get('q')
     query = {"query": {"match": {
         "dets.COMPANY CONFORMED NAME": target_name}},
