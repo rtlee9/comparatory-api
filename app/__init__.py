@@ -41,7 +41,7 @@ def autocomplete():
     query = {"query": {"match": {
         "dets.COMPANY CONFORMED NAME": target_name}},
         "_source": "dets.COMPANY CONFORMED NAME", "size": max_results}
-    resp = es_aws.search('comparatory', 'company', query)['hits']['hits']
+    resp = es_local.search('comparatory', 'company', query)['hits']['hits']
     assert len(resp) <= max_results
 
     names = [d['_source']['dets']
