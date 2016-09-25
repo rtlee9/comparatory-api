@@ -98,6 +98,15 @@ def index():
             # User entry: get company name
             cname = request.form['company-name']
 
+            es_query = {"query": {"match": {
+                "dets.COMPANY CONFORMED NAME": cname}},
+                "_source": "dets.COMPANY CONFORMED NAME", "size": 1}
+            resp = es.search(
+                'comparatory', 'company', es_query)['hits']['hits']
+            assert len(resp) == 1
+            name_match = [d['_source']['dets']
+                          ['COMPANY CONFORMED NAME'].upper() for d in resp][0]
+
             # Find next most similar
             query = """
             select
@@ -129,7 +138,7 @@ def index():
             inner join company_dets s
                 on n.sim_id = s.id
             where replace(upper(d.COMPANY_CONFORMED_NAME), \' \', \'\') =
-                \'""" + cname.upper().replace(' ', '') + """\'
+                \'""" + name_match.upper().replace(' ', '') + """\'
             """
 
             cursor.execute(query)
