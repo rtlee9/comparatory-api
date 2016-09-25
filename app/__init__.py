@@ -15,17 +15,18 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+AWS_RDS_HOST = os.environ['AWS_RDS_HOST']
+AWS_RDS_USER = os.environ['AWS_RDS_USER']
+AWS_RDS_PASSWORD = os.environ['AWS_RDS_PASSWORD']
+
 AWS_ES_ACCESS_KEY = os.environ['***REMOVED***']
-print "access key:"
-print AWS_ES_ACCESS_KEY
 AWS_ES_SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-print AWS_ES_SECRET_KEY
 
 # Connect to AWS RDS
 try:
-    conn_string = """
-        host='***REMOVED***'
-        dbname='comparatory' user='***REMOVED***' password='***REMOVED***'"""
+    conn_string = "host='" + AWS_RDS_HOST + \
+                  "' dbname='comparatory' user='" + AWS_RDS_USER + \
+                  "' password='" + AWS_RDS_PASSWORD + "'"
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
 
