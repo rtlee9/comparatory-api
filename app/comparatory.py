@@ -61,6 +61,12 @@ def get_db():
     return g.psql_db
 
 
+# Closes the database again at the end of the request
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'psql_db'):
+        g.psql_db.close()
+
 
 @app.route('/autocomplete', methods=['GET'])
 def autocomplete(max_results=10):
