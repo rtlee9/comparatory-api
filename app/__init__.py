@@ -2,7 +2,8 @@ import os
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, RequestsHttpConnection
+from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
 import auth.http_basic as auth
 
@@ -13,6 +14,12 @@ Bootstrap(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+AWS_ES_ACCESS_KEY = os.environ['***REMOVED***']
+print "access key:"
+print AWS_ES_ACCESS_KEY
+AWS_ES_SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+print AWS_ES_SECRET_KEY
 
 # Connect to AWS RDS
 try:
@@ -28,20 +35,25 @@ except psycopg2.DatabaseError:
 
 # Connnect to AWS elasticsearch
 es_local = Elasticsearch('localhost')
-es_aws = Elasticsearch(
-    '***REMOVED***'
-    'amazonaws.com/', verify_certs=True)
+host = os.environ['ES_HOST']
+awsauth = AWS4Auth(AWS_ES_ACCESS_KEY, AWS_ES_SECRET_KEY,
+                   'us-east-1', 'es')
+es = Elasticsearch(
+    hosts=[host],
+    http_auth=awsauth,
+    use_ssl=True,
+    verify_certs=True,
+    connection_class=RequestsHttpConnection
+)
 
 
 @app.route('/autocomplete', methods=['GET'])
-def autocomplete():
-    max_results = 10
-    target_name = "american internatonal group"
+def autocomplete(max_results=10):
     target_name = request.args.get('q')
     query = {"query": {"match": {
         "dets.COMPANY CONFORMED NAME": target_name}},
         "_source": "dets.COMPANY CONFORMED NAME", "size": max_results}
-    resp = es_aws.search('comparatory', 'company', query)['hits']['hits']
+    resp = es.search('comparatory', 'company', query)['hits']['hits']
     assert len(resp) <= max_results
 
     names = [d['_source']['dets']
