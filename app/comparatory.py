@@ -78,7 +78,7 @@ def autocomplete(max_results=10):
     resp = es.search('comparatory', 'company', query)['hits']['hits']
     assert len(resp) <= max_results
 
-    names = [d['_source']['NAME'].upper() for d in resp]
+    names = [d['_source']['NAME'].title() for d in resp]
     return jsonify(matching_results=names)
 
 
@@ -136,20 +136,20 @@ def index():
             inner join company_dets s
                 on n.sim_id = s.id
             where d.NAME =
-                \'""" + name_match + """\'
+                \'""" + name_match.upper() + """\'
             """
 
             cursor.execute(query)
 
             top_sims = cursor.fetchall()
-            primary_name = top_sims[0][1].upper().replace('&AMP;', '&')
+            primary_name = top_sims[0][1].title()
             results.append(
                 'Showing results for ' +
                 primary_name + ' [' + top_sims[0][2] + ']')
 
             for i in range(5):
                 next_b = top_sims[i]
-                next_name = next_b[13].upper().replace('&AMP;', '&')
+                next_name = next_b[13].title()
                 results.append(
                     str(next_b[11]) + '. ' + next_name + ' [' +
                     next_b[14] + ']')
