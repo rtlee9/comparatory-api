@@ -73,13 +73,12 @@ def autocomplete(max_results=10):
     es = get_es()
     target_name = request.args.get('q')
     query = {"query": {"match": {
-        "dets.COMPANY CONFORMED NAME": target_name}},
-        "_source": "dets.COMPANY CONFORMED NAME", "size": max_results}
+        "NAME": target_name}},
+        "_source": "NAME", "size": max_results}
     resp = es.search('comparatory', 'company', query)['hits']['hits']
     assert len(resp) <= max_results
 
-    names = [d['_source']['dets']
-             ['COMPANY CONFORMED NAME'].upper() for d in resp]
+    names = [d['_source']['NAME'].upper() for d in resp]
     return jsonify(matching_results=names)
 
 
@@ -99,19 +98,18 @@ def index():
             cname = request.form['company-name']
 
             es_query = {"query": {"match": {
-                "dets.COMPANY CONFORMED NAME": cname}},
-                "_source": "dets.COMPANY CONFORMED NAME", "size": 1}
+                "NAME": cname}},
+                "_source": "NAME", "size": 1}
             resp = es.search(
                 'comparatory', 'company', es_query)['hits']['hits']
             assert len(resp) == 1
-            name_match = [d['_source']['dets']
-                          ['COMPANY CONFORMED NAME'].upper() for d in resp][0]
+            name_match = [d['_source']['NAME'].upper() for d in resp][0]
 
             # Find next most similar
             query = """
             select
                 d.id as primary_id
-                ,d.company_conformed_name as primary_name
+                ,d.name as primary_name
                 ,d.sic_cd as primary_sic_cd
                 ,d.zip as primary_zip
                 ,d.city as primary_city
@@ -123,7 +121,7 @@ def index():
                 ,n.sim_score
                 ,n.sim_rank
                 ,s.id as next_id
-                ,s.company_conformed_name as next_name
+                ,s.name as next_name
                 ,s.sic_cd as next_sic_cd
                 ,s.zip as next_zip
                 ,s.city as next_city
@@ -137,8 +135,8 @@ def index():
                 on d.id = n.id
             inner join company_dets s
                 on n.sim_id = s.id
-            where replace(upper(d.COMPANY_CONFORMED_NAME), \' \', \'\') =
-                \'""" + name_match.upper().replace(' ', '') + """\'
+            where d.NAME =
+                \'""" + name_match + """\'
             """
 
             cursor.execute(query)
