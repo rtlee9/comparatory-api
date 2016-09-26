@@ -145,14 +145,14 @@ def index():
             primary_name = top_sims[0][1].title()
             results.append(
                 'Showing results for ' +
-                primary_name + ' [' + top_sims[0][2] + ']')
+                primary_name + ' [' + str(top_sims[0][2]) + ']')
 
             for i in range(5):
                 next_b = top_sims[i]
                 next_name = next_b[13].title()
                 results.append(
                     str(next_b[11]) + '. ' + next_name + ' [' +
-                    next_b[14] + ']')
+                    str(next_b[14]) + ']')
                 results.append(
                     '{0:2.0f}% similarity score'.format(next_b[10] * 100))
                 # results.append(next_b[21])
