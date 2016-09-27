@@ -150,6 +150,7 @@ def index():
             for i in range(5):
                 next_b = top_sims[i]
                 next_name = next_b[13].title()
+                results.append('---------------')
                 results.append(
                     str(next_b[11]) + '. ' + next_name + ' [' +
                     str(next_b[14]) + ']')
