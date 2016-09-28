@@ -90,7 +90,8 @@ def index():
     cursor = get_db()
 
     errors = []
-    results = []
+    match = {}
+    results = {}
     if request.method == "POST":
 
         try:
@@ -142,28 +143,26 @@ def index():
             cursor.execute(query)
 
             top_sims = cursor.fetchall()
-            primary_name = top_sims[0][1].title()
-            results.append(
-                'Showing results for ' +
-                primary_name + ' [' + str(top_sims[0][2]) + ']')
+            match['name'] = str(top_sims[0][1].title())
+            match['sic_cd'] = str(top_sims[0][2])
+            match['business_desc'] = str(top_sims[0][9])
 
             for i in range(5):
                 next_b = top_sims[i]
-                next_name = next_b[13].title()
-                results.append('---------------')
-                results.append(
-                    str(next_b[11]) + '. ' + next_name + ' [' +
-                    str(next_b[14]) + ']')
-                results.append(
-                    '{0:2.0f}% similarity score'.format(next_b[10] * 100))
-                # results.append(next_b[21])
+                results[i] = {
+                    'name': str(next_b[13].title()),
+                    'sic_cd': str(next_b[14]),
+                    'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
+                    'business_desc': next_b[21]
+                }
 
         except:
             errors.append(
                 "Unable to find similar companies -- please try again"
             )
 
-    return render_template('index.html', errors=errors, results=results)
+    return render_template(
+        'index.html', errors=errors, match=match, results=results)
 
 
 @app.errorhandler(401)
