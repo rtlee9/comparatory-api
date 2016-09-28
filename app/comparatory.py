@@ -149,7 +149,7 @@ def index():
 
             for i in range(5):
                 next_b = top_sims[i]
-                results[i] = {
+                results[i + 1] = {
                     'name': str(next_b[13].title()),
                     'sic_cd': str(next_b[14]),
                     'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
