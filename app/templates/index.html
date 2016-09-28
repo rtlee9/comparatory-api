@@ -49,10 +49,12 @@
     <h4>{{ error }}</h4>
     {% endfor %}
 
+    {% if match|length > 0 %}
     <h4>Showing results for <b>{{ match['name'] }} [{{ match['sic_cd'] }}]<b></h4>
     <a href="#" onclick="toggle_visibility('match_desc');">Show description</a>
     <div id="match_desc" style="display:none;"><h5>{{ match['business_desc'] }}</h5></div>
     <br><br>
+    {% endif %}
 
     {% for result in results %}
     <h4>{{ result['name'] }}</h4>
