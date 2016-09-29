@@ -6,6 +6,7 @@ from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
 import auth.http_basic as auth
+import re
 
 
 app = Flask(__name__)
@@ -167,11 +168,15 @@ def index():
         'index.html', errors=errors, match=match, results=results)
 
 
-@app.errorhandler(401)
-def custom_401(error):
-        return render_template('401.html'), 401
+def clean_desc(raw):
+    despaced = ' '.join(filter(lambda x: x != '', raw.split('\n')))
+    despaced = ' '.join(filter(lambda x: x != '', despaced.split(' ')))
+    item1 = re.compile('(\ *)ITEM 1(\.*) BUSINESS(\.*)', re.IGNORECASE)
+    desc = item1.sub('', despaced).strip()
+    return desc
 
 
+# Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
         return render_template('404.html'), 404
