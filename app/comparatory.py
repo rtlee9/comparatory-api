@@ -6,6 +6,7 @@ from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
 import auth.http_basic as auth
+import re
 
 
 app = Flask(__name__)
@@ -90,7 +91,8 @@ def index():
     cursor = get_db()
 
     errors = []
-    results = []
+    match = {}
+    results = {}
     if request.method == "POST":
 
         try:
@@ -130,6 +132,8 @@ def index():
                 ,s.irs_number as next_irs_number
                 ,s.filed_as_of_date as next_filed_dt
                 ,s.business_description as next_bus_desc
+                ,d.raw_description as primary_raw_desc
+                ,s.raw_description as next_raw_desc
             from company_dets d
             inner join sims n
                 on d.id = n.id
@@ -142,34 +146,37 @@ def index():
             cursor.execute(query)
 
             top_sims = cursor.fetchall()
-            primary_name = top_sims[0][1].title()
-            results.append(
-                'Showing results for ' +
-                primary_name + ' [' + str(top_sims[0][2]) + ']')
+            match['name'] = str(top_sims[0][1].title())
+            match['sic_cd'] = str(top_sims[0][2])
+            match['business_desc'] = clean_desc(top_sims[0][22])
 
             for i in range(5):
                 next_b = top_sims[i]
-                next_name = next_b[13].title()
-                results.append(
-                    str(next_b[11]) + '. ' + next_name + ' [' +
-                    str(next_b[14]) + ']')
-                results.append(
-                    '{0:2.0f}% similarity score'.format(next_b[10] * 100))
-                # results.append(next_b[21])
+                results[i + 1] = {
+                    'name': str(next_b[13].title()),
+                    'sic_cd': str(next_b[14]),
+                    'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
+                    'business_desc': clean_desc(next_b[23])
+                }
 
         except:
             errors.append(
                 "Unable to find similar companies -- please try again"
             )
 
-    return render_template('index.html', errors=errors, results=results)
+    return render_template(
+        'index.html', errors=errors, match=match, results=results)
 
 
-@app.errorhandler(401)
-def custom_401(error):
-        return render_template('401.html'), 401
+def clean_desc(raw):
+    despaced = ' '.join(filter(lambda x: x != '', raw.split('\n')))
+    despaced = ' '.join(filter(lambda x: x != '', despaced.split(' ')))
+    item1 = re.compile('(\ *)ITEM 1(\.*) BUSINESS(\.*)', re.IGNORECASE)
+    desc = item1.sub('', despaced).strip()
+    return desc
 
 
+# Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
         return render_template('404.html'), 404
