@@ -1,11 +1,30 @@
 {% block page_title %}Unauthorized{% endblock %}
 
-{% block content %}
+
+{% block body %}
+<div class="text-center">
+<div class="container">
 <div class="jumbotron">
-    <div class="text-center">
-        <h1>401</h1>
-        <p>You are not authorized to see this page.
-        </p>
-    </div>
+  <h1>401</h1>
+  <h2>You are not authorized to see this page.</h2>
+  <br/>
+</div>
+</div>
+
+  <br/>
+
+  <a onclick="goBack()" class="btn btn-default" title="Go back">
+    <span>Back</span>
+  </a>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+  <a href="/" class="btn btn-default" title="Home">
+    <span>Home</span>
+  </a>
 </div>
 {% endblock %}

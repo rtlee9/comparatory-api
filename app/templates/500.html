@@ -1,13 +1,29 @@
-
-{% extends "layout.html" %}
-
 {% block page_title %}Server error{% endblock %}
 
-{% block content %}
+{% block body %}
+<div class="text-center">
+<div class="container">
 <div class="jumbotron">
-    <div class="text-center">
-        <h1>500</h1>
-        <p>Sorry, something went wrong on our system. Don't panic, we are fixing it! Please try again later.</p>
-    </div>
+  <h1>500</h1>
+  <h2>Sorry, something went wrong on our system.</h2>
+  <br/>
+</div>
+</div>
+
+  <br/>
+
+  <a onclick="goBack()" class="btn btn-default" title="Go back">
+    <span>Back</span>
+  </a>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+  <a href="/" class="btn btn-default" title="Home">
+    <span>Home</span>
+  </a>
 </div>
 {% endblock %}
