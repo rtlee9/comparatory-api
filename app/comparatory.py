@@ -131,6 +131,8 @@ def index():
                 ,s.irs_number as next_irs_number
                 ,s.filed_as_of_date as next_filed_dt
                 ,s.business_description as next_bus_desc
+                ,d.raw_description as primary_raw_desc
+                ,s.raw_description as next_raw_desc
             from company_dets d
             inner join sims n
                 on d.id = n.id
@@ -145,7 +147,7 @@ def index():
             top_sims = cursor.fetchall()
             match['name'] = str(top_sims[0][1].title())
             match['sic_cd'] = str(top_sims[0][2])
-            match['business_desc'] = str(top_sims[0][9])
+            match['business_desc'] = clean_desc(top_sims[0][22])
 
             for i in range(5):
                 next_b = top_sims[i]
@@ -153,7 +155,7 @@ def index():
                     'name': str(next_b[13].title()),
                     'sic_cd': str(next_b[14]),
                     'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
-                    'business_desc': next_b[21]
+                    'business_desc': clean_desc(next_b[23])
                 }
 
         except:
