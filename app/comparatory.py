@@ -165,10 +165,19 @@ def index():
     return render_template('index.html', errors=errors, results=results)
 
 
-# Sample HTTP error handling
+@app.errorhandler(401)
+def custom_401(error):
+        return render_template('401.html'), 401
+
+
 @app.errorhandler(404)
 def not_found(error):
         return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+        return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
