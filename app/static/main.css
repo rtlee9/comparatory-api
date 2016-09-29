@@ -1,5 +1,7 @@
 .container {
     max-width: 1000px;
+    display: block;
+    position: relative;
 }
 
 .ui-autocomplete {
