@@ -61,7 +61,7 @@
     {% endfor %}
 
     {% for key, value in results.iteritems() %}
-    <h4>{{ key }}. {{ value['name'] }} [{{ match['sic_cd'] }}] </h4>
+    <h4>{{ key }}. {{ value['name'] }} [{{ value['sic_cd'] }}] </h4>
     <p><i>{{ value['sim_score'] }} similarity score </i></p>
     <a href="#" onclick="toggle_visibility('{{ key }}');">Show description</a>
     <div id="{{ key }}" style="display:none;"><h5>{{ value['business_desc'] }}</h5></div>
