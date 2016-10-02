@@ -119,6 +119,9 @@ def index():
     errors = []
     match = {}
     results = {}
+    target = None
+    sim_ids = []
+
     if request.method == "POST":
 
         try:
@@ -175,6 +178,7 @@ def index():
             match['name'] = str(top_sims[0][1].title())
             match['sic_cd'] = str(top_sims[0][2])
             match['business_desc'] = clean_desc(top_sims[0][22])
+            target = top_sims[0][0]
 
             for i in range(5):
                 next_b = top_sims[i]
@@ -184,13 +188,14 @@ def index():
                     'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
                     'business_desc': clean_desc(next_b[23])
                 }
+                sim_ids.append(next_b[12])
 
         except:
             errors.append(
                 "Unable to find similar companies -- please try again"
             )
 
-    plot = get_scatter()
+    plot = get_scatter(target, sim_ids)
     script, div = components(plot)
     return render_template(
         'index.html', errors=errors, match=match,
@@ -205,10 +210,10 @@ def clean_desc(raw):
     return desc
 
 
-def get_scatter():
+def get_scatter(target=None, sim_ids=None):
     cursor = get_db()
     cursor.execute(
-        'select E.X1, E.X2, C.sic_cd, C.name '
+        'select E.X1, E.X2, C.sic_cd, C.name, C.id '
         'from embedded E '
         'inner join company_dets C on E.id = C.id')
     SNE_vecs = cursor.fetchall()
@@ -228,6 +233,8 @@ def get_scatter():
                 colorVal[0] * 255, colorVal[1] * 255, colorVal[2] * 255))
         except:
             colors.append("#d3d3d3")
+
+    # Color based on proximity to target
 
     source = ColumnDataSource(
         data=dict(
@@ -251,6 +258,15 @@ def get_scatter():
     plot.toolbar.logo = None
     plot.axis.visible = False
     plot.grid.visible = False
+
+    # Zoom in on specified company
+    if target is not None:
+        t_point = vecs[vecs['id'] == target].iloc[0]
+        plot.x_range.start = t_point['x1'] - 1
+        plot.x_range.end = t_point['x1'] + 1
+        plot.y_range.start = t_point['x2'] - 1
+        plot.y_range.end = t_point['x2'] + 1
+
     return plot
 
 
