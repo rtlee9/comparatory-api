@@ -7,6 +7,12 @@ from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
 import auth.http_basic as auth
 import re
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.cm as cmx
+from bokeh.plotting import figure, ColumnDataSource
+from bokeh.models import HoverTool
+from bokeh.embed import components
 
 
 app = Flask(__name__)
@@ -177,8 +183,11 @@ def index():
                 "Unable to find similar companies -- please try again"
             )
 
+    plot = get_scatter()
+    script, div = components(plot)
     return render_template(
-        'index.html', errors=errors, match=match, results=results)
+        'index.html', errors=errors, match=match,
+        results=results, div=div, script=script)
 
 
 def clean_desc(raw):
@@ -187,6 +196,57 @@ def clean_desc(raw):
     item1 = re.compile('(\ *)ITEM 1(\.*) BUSINESS(\.*)', re.IGNORECASE)
     desc = item1.sub('', despaced).strip()
     return desc
+
+
+def get_scatter():
+    cursor = get_db()
+    cursor.execute(
+        'select E.X1, E.X2, C.* '
+        'from embedded E '
+        'inner join company_dets C on E.id = C.id')
+    SNE_vecs = cursor.fetchall()
+    colnames = [desc[0] for desc in cursor.description]
+
+    vecs = pd.DataFrame(SNE_vecs, columns=colnames)
+    vecs.head()
+
+    theme = cmx.get_cmap('viridis')
+    cNorm = mpl.colors.Normalize(vmin=0, vmax=9999)
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=theme)
+
+    colors = []
+    for s in vecs['sic_cd']:
+        try:
+            colorVal = scalarMap.to_rgba(int(s))
+            colors.append("#%02x%02x%02x" % (
+                colorVal[0] * 255, colorVal[1] * 255, colorVal[2] * 255))
+        except:
+            colors.append("#d3d3d3")
+
+    source = ColumnDataSource(
+        data=dict(
+            x=list(vecs['x1']),
+            y=list(vecs['x2']),
+            desc=list(vecs['sic_cd']),
+            name=list([v.title() for v in vecs['name']]),
+        )
+    )
+
+    hover = HoverTool(
+        tooltips=[
+            ("Name", "@name"),
+            ("SIC", "@desc"),
+        ]
+    )
+
+    TOOLS = "pan,wheel_zoom,box_zoom,undo,redo,reset,tap,save,box_select,"\
+            "poly_select,lasso_select"
+    plot = figure(plot_width=800, tools=[hover, TOOLS])
+    plot.scatter('x', 'y', source=source, color=colors, alpha=.5, size=3)
+    plot.toolbar.logo = None
+    plot.axis.visible = False
+    plot.grid.visible = False
+    return plot
 
 
 @app.errorhandler(401)
