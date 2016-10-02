@@ -227,7 +227,9 @@ def get_scatter(target=None, sim_ids=None):
 
     colors = []
 
+    dot_size = 3
     if target is not None:
+        dot_size = 6
         # Color based on proximity to target
         for i in vecs['id']:
             if i == target:
@@ -264,7 +266,8 @@ def get_scatter(target=None, sim_ids=None):
 
     TOOLS = "pan,wheel_zoom,box_zoom,undo,redo,reset,save,box_select,"
     plot = figure(plot_width=800, tools=[hover, TOOLS])
-    plot.scatter('x', 'y', source=source, color=colors, alpha=.5, size=3)
+    plot.scatter(
+        'x', 'y', source=source, color=colors, alpha=.5, size=dot_size)
     plot.toolbar.logo = None
     plot.axis.visible = False
     plot.grid.visible = False
