@@ -227,18 +227,26 @@ def get_scatter(target=None, sim_ids=None):
 
     colors = []
 
-    dot_size = 3
     if target is not None:
-        dot_size = 6
+        dot_size = []
+        alpha = []
         # Color based on proximity to target
         for i in vecs['id']:
             if i == target:
                 colors.append("#e844d4")
+                dot_size.append([9])
+                alpha.append([.9])
             elif i in sim_ids:
                 colors.append("#44e858")
+                dot_size.append([8])
+                alpha.append([.8])
             else:
-                colors.append("#d3d3d3")
+                colors.append("#acacac")
+                dot_size.append([7])
+                alpha.append([.5])
     else:
+        dot_size = 3
+        alpha = .5
         # Color based on SIC code
         for s in vecs['sic_cd']:
             try:
