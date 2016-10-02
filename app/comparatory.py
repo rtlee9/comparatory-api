@@ -7,6 +7,12 @@ from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
 import auth.http_basic as auth
 import re
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.cm as cmx
+from bokeh.plotting import figure, ColumnDataSource
+from bokeh.models import HoverTool
+from bokeh.embed import components
 
 
 app = Flask(__name__)
@@ -31,6 +37,13 @@ def _connect_db():
     return conn.cursor()
 
 
+# Connect to local RDS
+def _connect_db_local():
+    conn_string = "host='localhost' dbname='ind'"
+    conn = psycopg2.connect(conn_string)
+    return conn.cursor()
+
+
 # Connnect to AWS elasticsearch
 def _connect_es():
     host = os.environ['ES_HOST']
@@ -43,6 +56,12 @@ def _connect_es():
         verify_certs=True,
         connection_class=RequestsHttpConnection
     )
+    return es
+
+
+# Connnect to local elasticsearch
+def _connect_es_local():
+    es = Elasticsearch()
     return es
 
 
@@ -83,6 +102,13 @@ def autocomplete(max_results=10):
     return jsonify(matching_results=names)
 
 
+@app.route('/graph', methods=['GET'])
+def graph():
+    plot = get_scatter()
+    script, div = components(plot)
+    return render_template('graph.html', script=script, div=div)
+
+
 @app.route('/', methods=['GET', 'POST'])
 @auth.requires_auth
 def index():
@@ -93,6 +119,9 @@ def index():
     errors = []
     match = {}
     results = {}
+    target = None
+    sim_ids = []
+
     if request.method == "POST":
 
         try:
@@ -149,6 +178,7 @@ def index():
             match['name'] = str(top_sims[0][1].title())
             match['sic_cd'] = str(top_sims[0][2])
             match['business_desc'] = clean_desc(top_sims[0][22])
+            target = top_sims[0][0]
 
             for i in range(5):
                 next_b = top_sims[i]
@@ -158,14 +188,18 @@ def index():
                     'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
                     'business_desc': clean_desc(next_b[23])
                 }
+                sim_ids.append(next_b[12])
 
         except:
             errors.append(
                 "Unable to find similar companies -- please try again"
             )
 
+    plot = get_scatter(target, sim_ids)
+    script, div = components(plot)
     return render_template(
-        'index.html', errors=errors, match=match, results=results)
+        'index.html', errors=errors, match=match,
+        results=results, div=div, script=script)
 
 
 def clean_desc(raw):
@@ -174,6 +208,90 @@ def clean_desc(raw):
     item1 = re.compile('(\ *)ITEM 1(\.*) BUSINESS(\.*)', re.IGNORECASE)
     desc = item1.sub('', despaced).strip()
     return desc
+
+
+def get_scatter(target=None, sim_ids=None):
+    cursor = get_db()
+    cursor.execute(
+        'select E.X1, E.X2, C.sic_cd, C.name, C.id '
+        'from embedded E '
+        'inner join company_dets C on E.id = C.id')
+    SNE_vecs = cursor.fetchall()
+    colnames = [desc[0] for desc in cursor.description]
+
+    vecs = pd.DataFrame(SNE_vecs, columns=colnames)
+
+    theme = cmx.get_cmap('viridis')
+    cNorm = mpl.colors.Normalize(vmin=0, vmax=9999)
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=theme)
+
+    colors = []
+
+    dot_size = 3
+    if target is not None:
+        dot_size = 6
+        # Color based on proximity to target
+        for i in vecs['id']:
+            if i == target:
+                colors.append("#e844d4")
+            elif i in sim_ids:
+                colors.append("#44e858")
+            else:
+                colors.append("#d3d3d3")
+    else:
+        # Color based on SIC code
+        for s in vecs['sic_cd']:
+            try:
+                colorVal = scalarMap.to_rgba(int(s))
+                colors.append("#%02x%02x%02x" % (
+                    colorVal[0] * 255, colorVal[1] * 255, colorVal[2] * 255))
+            except:
+                colors.append("#d3d3d3")
+
+    source = ColumnDataSource(
+        data=dict(
+            x=list(vecs['x1']),
+            y=list(vecs['x2']),
+            desc=list(vecs['sic_cd']),
+            name=list([v.title() for v in vecs['name']]),
+        )
+    )
+
+    hover = HoverTool(
+        tooltips=[
+            ("Name", "@name"),
+            ("SIC", "@desc"),
+        ]
+    )
+
+    TOOLS = "pan,wheel_zoom,box_zoom,reset,save"
+    plot = figure(plot_width=800, tools=[hover, TOOLS])
+    plot.scatter(
+        'x', 'y', source=source, color=colors, alpha=.5, size=dot_size)
+    plot.toolbar.logo = None
+    plot.axis.visible = False
+    plot.grid.visible = False
+
+    # Zoom in on specified company
+    if target is not None:
+        zoom = 0.2
+        margin = 0.05
+        t_point = vecs[vecs['id'] == target].iloc[0]
+        joint = sim_ids + [target]
+        joint_df = vecs[vecs['id'].isin(joint)]
+        x_min = joint_df['x1'].min()
+        x_max = joint_df['x1'].max()
+        y_min = joint_df['x2'].min()
+        y_max = joint_df['x2'].max()
+
+        plot.x_range.start = min(t_point['x1'] - zoom, x_min - margin)
+        plot.x_range.end = max(t_point['x1'] + zoom, x_max + margin)
+        plot.y_range.start = min(t_point['x2'] - zoom, y_min - margin)
+        plot.y_range.end = max(t_point['x2'] + zoom, y_max + margin)
+        plot.plot_width = 400
+        plot.plot_height = 400
+
+    return plot
 
 
 @app.errorhandler(401)
