@@ -208,14 +208,13 @@ def clean_desc(raw):
 def get_scatter():
     cursor = get_db()
     cursor.execute(
-        'select E.X1, E.X2, C.* '
+        'select E.X1, E.X2, C.sic_cd, C.name '
         'from embedded E '
         'inner join company_dets C on E.id = C.id')
     SNE_vecs = cursor.fetchall()
     colnames = [desc[0] for desc in cursor.description]
 
     vecs = pd.DataFrame(SNE_vecs, columns=colnames)
-    vecs.head()
 
     theme = cmx.get_cmap('viridis')
     cNorm = mpl.colors.Normalize(vmin=0, vmax=9999)
@@ -246,8 +245,7 @@ def get_scatter():
         ]
     )
 
-    TOOLS = "pan,wheel_zoom,box_zoom,undo,redo,reset,tap,save,box_select,"\
-            "poly_select,lasso_select"
+    TOOLS = "pan,wheel_zoom,box_zoom,undo,redo,reset,save,box_select,"
     plot = figure(plot_width=800, tools=[hover, TOOLS])
     plot.scatter('x', 'y', source=source, color=colors, alpha=.5, size=3)
     plot.toolbar.logo = None
