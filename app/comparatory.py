@@ -227,18 +227,26 @@ def get_scatter(target=None, sim_ids=None):
 
     colors = []
 
-    dot_size = 3
     if target is not None:
-        dot_size = 6
+        dot_size = []
+        alpha = []
         # Color based on proximity to target
         for i in vecs['id']:
             if i == target:
                 colors.append("#e844d4")
+                dot_size.append([9])
+                alpha.append([.9])
             elif i in sim_ids:
                 colors.append("#44e858")
+                dot_size.append([8])
+                alpha.append([.8])
             else:
-                colors.append("#d3d3d3")
+                colors.append("#acacac")
+                dot_size.append([7])
+                alpha.append([.5])
     else:
+        dot_size = 3
+        alpha = .5
         # Color based on SIC code
         for s in vecs['sic_cd']:
             try:
@@ -274,7 +282,7 @@ def get_scatter(target=None, sim_ids=None):
 
     # Zoom in on specified company
     if target is not None:
-        zoom = 0.2
+        zoom = 0.1
         margin = 0.05
         t_point = vecs[vecs['id'] == target].iloc[0]
         joint = sim_ids + [target]
@@ -283,11 +291,18 @@ def get_scatter(target=None, sim_ids=None):
         x_max = joint_df['x1'].max()
         y_min = joint_df['x2'].min()
         y_max = joint_df['x2'].max()
+        max_diff = max(
+            t_point['x1'] - x_min,
+            x_max - t_point['x1'],
+            t_point['x2'] - y_min,
+            y_max - t_point['x2'],
+        )
+        z = max(zoom, max_diff + margin)
 
-        plot.x_range.start = min(t_point['x1'] - zoom, x_min - margin)
-        plot.x_range.end = max(t_point['x1'] + zoom, x_max + margin)
-        plot.y_range.start = min(t_point['x2'] - zoom, y_min - margin)
-        plot.y_range.end = max(t_point['x2'] + zoom, y_max + margin)
+        plot.x_range.start = t_point['x1'] - z
+        plot.x_range.end = t_point['x1'] + z
+        plot.y_range.start = t_point['x2'] - z
+        plot.y_range.end = t_point['x2'] + z
         plot.plot_width = 400
         plot.plot_height = 400
 
