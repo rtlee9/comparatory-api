@@ -226,15 +226,25 @@ def get_scatter(target=None, sim_ids=None):
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=theme)
 
     colors = []
-    for s in vecs['sic_cd']:
-        try:
-            colorVal = scalarMap.to_rgba(int(s))
-            colors.append("#%02x%02x%02x" % (
-                colorVal[0] * 255, colorVal[1] * 255, colorVal[2] * 255))
-        except:
-            colors.append("#d3d3d3")
 
-    # Color based on proximity to target
+    if target is not None:
+        # Color based on proximity to target
+        for i in vecs['id']:
+            if i == target:
+                colors.append("#e844d4")
+            elif i in sim_ids:
+                colors.append("#44e858")
+            else:
+                colors.append("#d3d3d3")
+    else:
+        # Color based on SIC code
+        for s in vecs['sic_cd']:
+            try:
+                colorVal = scalarMap.to_rgba(int(s))
+                colors.append("#%02x%02x%02x" % (
+                    colorVal[0] * 255, colorVal[1] * 255, colorVal[2] * 255))
+            except:
+                colors.append("#d3d3d3")
 
     source = ColumnDataSource(
         data=dict(
