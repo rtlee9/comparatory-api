@@ -274,11 +274,22 @@ def get_scatter(target=None, sim_ids=None):
 
     # Zoom in on specified company
     if target is not None:
+        zoom = 0.2
+        margin = 0.05
         t_point = vecs[vecs['id'] == target].iloc[0]
-        plot.x_range.start = t_point['x1'] - 1
-        plot.x_range.end = t_point['x1'] + 1
-        plot.y_range.start = t_point['x2'] - 1
-        plot.y_range.end = t_point['x2'] + 1
+        joint = sim_ids + [target]
+        joint_df = vecs[vecs['id'].isin(joint)]
+        x_min = joint_df['x1'].min()
+        x_max = joint_df['x1'].max()
+        y_min = joint_df['x2'].min()
+        y_max = joint_df['x2'].max()
+
+        plot.x_range.start = min(t_point['x1'] - zoom, x_min - margin)
+        plot.x_range.end = max(t_point['x1'] + zoom, x_max + margin)
+        plot.y_range.start = min(t_point['x2'] - zoom, y_min - margin)
+        plot.y_range.end = max(t_point['x2'] + zoom, y_max + margin)
+        plot.plot_width = 400
+        plot.plot_height = 400
 
     return plot
 
