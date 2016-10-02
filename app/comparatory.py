@@ -102,6 +102,13 @@ def autocomplete(max_results=10):
     return jsonify(matching_results=names)
 
 
+@app.route('/graph', methods=['GET'])
+def graph():
+    plot = get_scatter()
+    script, div = components(plot)
+    return render_template('graph.html', script=script, div=div)
+
+
 @app.route('/', methods=['GET', 'POST'])
 @auth.requires_auth
 def index():
