@@ -31,6 +31,13 @@ def _connect_db():
     return conn.cursor()
 
 
+# Connect to local RDS
+def _connect_db_local():
+    conn_string = "host='localhost' dbname='ind'"
+    conn = psycopg2.connect(conn_string)
+    return conn.cursor()
+
+
 # Connnect to AWS elasticsearch
 def _connect_es():
     host = os.environ['ES_HOST']
@@ -43,6 +50,12 @@ def _connect_es():
         verify_certs=True,
         connection_class=RequestsHttpConnection
     )
+    return es
+
+
+# Connnect to local elasticsearch
+def _connect_es_local():
+    es = Elasticsearch()
     return es
 
 
