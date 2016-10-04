@@ -28,6 +28,23 @@ AWS_ES_ACCESS_KEY = os.environ['***REMOVED***']
 AWS_ES_SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 
 
+def set_scatter_data():
+    cursor = get_db()
+    cursor.execute(
+        'select E.X1, E.X2, C.sic_cd, C.name, C.id '
+        'from embedded E '
+        'inner join company_dets C on E.id = C.id')
+    SNE_vecs = cursor.fetchall()
+    colnames = [desc[0] for desc in cursor.description]
+    return pd.DataFrame(SNE_vecs, columns=colnames)
+
+
+def get_scatter_data():
+    if not hasattr(g, 'vecs'):
+        g.vecs = set_scatter_data()
+    return g.vecs
+
+
 # Connect to AWS RDS
 def _connect_db():
     conn_string = "host='" + AWS_RDS_HOST + \
@@ -219,16 +236,7 @@ def clean_desc(raw):
 
 
 def get_scatter(target=None, sim_ids=None):
-    cursor = get_db()
-    cursor.execute(
-        'select E.X1, E.X2, C.sic_cd, C.name, C.id '
-        'from embedded E '
-        'inner join company_dets C on E.id = C.id')
-    SNE_vecs = cursor.fetchall()
-    colnames = [desc[0] for desc in cursor.description]
-
-    vecs = pd.DataFrame(SNE_vecs, columns=colnames)
-
+    vecs = get_scatter_data()
     theme = cmx.get_cmap('viridis')
     cNorm = mpl.colors.Normalize(vmin=0, vmax=9999)
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=theme)
