@@ -106,6 +106,10 @@ def comp_case(name):
     return " ".join(w.capitalize() for w in name.split())
 
 
+def decomp_case(name):
+    return name.upper().replace("'", "''")
+
+
 @app.route('/graph', methods=['GET'])
 def graph():
     plot = get_scatter()
@@ -173,7 +177,7 @@ def index():
             inner join company_dets s
                 on n.sim_id = s.id
             where d.NAME =
-                \'""" + name_match.upper() + """\'
+                \'""" + decomp_case(name_match) + """\'
             """
 
             cursor.execute(query)
