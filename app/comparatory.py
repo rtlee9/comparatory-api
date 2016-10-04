@@ -98,8 +98,16 @@ def autocomplete(max_results=10):
     resp = es.search('comparatory', 'company', query)['hits']['hits']
     assert len(resp) <= max_results
 
-    names = [d['_source']['NAME'].title() for d in resp]
+    names = [comp_case(d['_source']['NAME']) for d in resp]
     return jsonify(matching_results=names)
+
+
+def comp_case(name):
+    return " ".join(w.capitalize() for w in name.split())
+
+
+def decomp_case(name):
+    return name.upper().replace("'", "''")
 
 
 @app.route('/graph', methods=['GET'])
@@ -169,13 +177,13 @@ def index():
             inner join company_dets s
                 on n.sim_id = s.id
             where d.NAME =
-                \'""" + name_match.upper() + """\'
+                \'""" + decomp_case(name_match) + """\'
             """
 
             cursor.execute(query)
 
             top_sims = cursor.fetchall()
-            match['name'] = str(top_sims[0][1].title())
+            match['name'] = comp_case(str(top_sims[0][1]))
             match['sic_cd'] = str(top_sims[0][2])
             match['business_desc'] = clean_desc(top_sims[0][22])
             target = top_sims[0][0]
@@ -183,7 +191,7 @@ def index():
             for i in range(5):
                 next_b = top_sims[i]
                 results[i + 1] = {
-                    'name': str(next_b[13].title()),
+                    'name': comp_case(str(next_b[13])),
                     'sic_cd': str(next_b[14]),
                     'sim_score': str('{0:2.0f}%'.format(next_b[10] * 100)),
                     'business_desc': clean_desc(next_b[23])
@@ -261,7 +269,7 @@ def get_scatter(target=None, sim_ids=None):
             x=list(vecs['x1']),
             y=list(vecs['x2']),
             desc=list(vecs['sic_cd']),
-            name=list([v.title() for v in vecs['name']]),
+            name=list([comp_case(v) for v in vecs['name']]),
         )
     )
 

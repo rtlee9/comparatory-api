@@ -53,7 +53,7 @@
     {% if match|length > 0 %}
     <h4>Showing results for <b>{{ match['name'] }} [{{ match['sic_cd'] }}]<b></h4>
     <a href="#" onclick="toggle_visibility('match_desc');">Show description</a>
-    <div id="match_desc" style="display:none;"><h5>{{ match['business_desc'] }}</h5></div>
+    <div class="pre-scrollable" id="match_desc" style="display:none;"><h5>{{ match['business_desc'] }}</h5></div>
     <br><br>
     {% endif %}
 
@@ -65,7 +65,7 @@
     <h4>{{ key }}. {{ value['name'] }} [{{ value['sic_cd'] }}] </h4>
     <p><i>{{ value['sim_score'] }} similarity score </i></p>
     <a href="#" onclick="toggle_visibility('{{ key }}');">Show description</a>
-    <div id="{{ key }}" style="display:none;"><h5>{{ value['business_desc'] }}</h5></div>
+    <div class="pre-scrollable" id="{{ key }}" style="display:none;"><h5>{{ value['business_desc'] }}</h5></div>
     {% endfor %}
 
   </div>
