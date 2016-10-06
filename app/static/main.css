@@ -1,3 +1,7 @@
+.pre-scrollable {
+    background-color: #eff5ef;
+}
+
 p {
     line-height: 100%;
     font-weight: normal;
