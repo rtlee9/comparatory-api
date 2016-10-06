@@ -228,11 +228,10 @@ def index():
 
 
 def clean_desc(raw):
-    despaced = ' '.join(filter(lambda x: x != '', raw.split('\n')))
-    despaced = ' '.join(filter(lambda x: x != '', despaced.split(' ')))
+    despaced = ' '.join(filter(lambda x: x != '', raw.split(' ')))
     item1 = re.compile('(\ *)ITEM 1(\.*) BUSINESS(\.*)', re.IGNORECASE)
     desc = item1.sub('', despaced).strip()
-    return desc
+    return filter(lambda x: x != '', desc.split('\n'))
 
 
 def get_scatter(target=None, sim_ids=None):
