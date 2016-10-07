@@ -220,8 +220,11 @@ def index():
                 "Unable to find similar companies -- please try again"
             )
 
-    plot = get_scatter(target, sim_ids)
-    script, div = components(plot)
+    div = None
+    script = ''
+    if target is not None:
+        plot = get_scatter(target, sim_ids)
+        script, div = components(plot)
     return render_template(
         'search.html', errors=errors, match=match,
         results=results, div=div, script=script)
@@ -326,17 +329,17 @@ def get_scatter(target=None, sim_ids=None):
 
 @app.errorhandler(401)
 def custom_401(error):
-        return render_template('401.html'), 401
+    return render_template('401.html'), 401
 
 
 @app.errorhandler(404)
 def not_found(error):
-        return render_template('404.html'), 404
+    return render_template('404.html'), 404
 
 
 @app.errorhandler(500)
 def internal_error(error):
-        return render_template('500.html'), 500
+    return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
