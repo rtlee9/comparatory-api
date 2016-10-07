@@ -83,6 +83,12 @@ p {
     color: #2f2f2f;
 }
 
+.navbar a:hover {
+    background-color: transparent;
+    color: white;
+    text-decoration: underline;
+}
+
 .navbar-comp li a:hover {
     background-color: transparent;
     color: white;
