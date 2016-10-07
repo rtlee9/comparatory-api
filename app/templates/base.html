@@ -8,6 +8,7 @@
 {% block styles %}
 {{super()}}
 <link rel="stylesheet" href="/static/main.css"/>
+<link rel="stylesheet" href="/static/navbar.css"/>
 <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.2.min.css" />
 {% endblock %}
 
@@ -17,7 +18,7 @@
 {% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-custom navbar-fixed-top navbar-comp">
+<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-nav center-block">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -28,12 +29,12 @@
       <a class="navbar-brand" href="#">***REMOVED***</a>
     </div>
     <div class="navbar-collapse collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-	<li><a href="#">Search</a></li>
-	<li><a href="#">Explore</a></li>
+      <ul class="navbar-nav nav">
+	<li><a href="/search">Search</a></li>
+	<li><a href="/explore">Explore</a></li>
 	<li><a href="#">Describe</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="navbar-nav nav navbar-right">
 	<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
 	<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
       </ul>

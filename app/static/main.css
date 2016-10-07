@@ -3,6 +3,10 @@ p {
     font-weight: normal;
 }
 
+body {
+    padding-top: 70px;
+}
+
 a {
     color: #358997;
 }
@@ -93,43 +97,6 @@ h1, h2, h3, h4, h5 {
     color: white;
 }
 
-.navbar-comp {
-    background-color: #5db18f;
-}
-
-.navbar-comp a {
-    color: #2f2f2f;
-}
-
-.navbar a:hover {
-    background-color: transparent;
-    color: white;
-    text-decoration: underline;
-}
-
-.navbar-comp li a:hover {
-    background-color: transparent;
-    color: white;
-    text-decoration: underline;
-}
-
 .navbar-nav {
     margin: 0 2px 0 2px;
-}
-
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-    background-color: #FFFF00;
-    color: #FFC0CB;
-}
-
-.icon-bar {
-    background-color: #2f2f2f;
-}
-
-.navbar-toggle:hover .icon-bar {
-    background-color: white;
-}
-
-body {
-    padding-top: 70px;
 }
