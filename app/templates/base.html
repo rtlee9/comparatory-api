@@ -1,0 +1,53 @@
+{% extends "bootstrap/base.html" %}
+{% block html_attribs %} lang="en"{% endblock %}
+{% block title %} ***REMOVED*** {% endblock %}
+
+{% block head %}
+{{super()}}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="/static/main.css"/>
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.2.min.css" />
+{% endblock %}
+
+{% block metas %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-custom navbar-fixed-top navbar-comp">
+  <div class="container-nav center-block">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">***REMOVED***</a>
+    </div>
+    <div class="navbar-collapse collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+	<li><a href="#">Search</a></li>
+	<li><a href="#">Explore</a></li>
+	<li><a href="#">Describe</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+	<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+	<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/static/autocomplete.js"></script>
+<script src="/static/toggle.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.2.min.js"></script>
+{{ script | safe }}
+{% endblock %}
