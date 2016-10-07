@@ -127,14 +127,14 @@ def decomp_case(name):
     return name.upper().replace("'", "''")
 
 
-@app.route('/graph', methods=['GET'])
+@app.route('/explore', methods=['GET'])
 def graph():
     plot = get_scatter()
     script, div = components(plot)
-    return render_template('graph.html', script=script, div=div)
+    return render_template('explore.html', script=script, div=div)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/search', methods=['GET', 'POST'])
 @auth.requires_auth
 def index():
 
@@ -223,7 +223,7 @@ def index():
     plot = get_scatter(target, sim_ids)
     script, div = components(plot)
     return render_template(
-        'index.html', errors=errors, match=match,
+        'search.html', errors=errors, match=match,
         results=results, div=div, script=script)
 
 
