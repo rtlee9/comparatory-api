@@ -3,6 +3,18 @@ p {
     font-weight: normal;
 }
 
+a {
+    color: #358997;
+}
+
+a:hover {
+    color: #09414B;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #2f2f2f;
+}
+
 .container-nav {
     max-width: 1400px;
     display: block;
@@ -72,7 +84,13 @@ p {
 }
 
 .btn-comp {
-    background-color: #92cbb4;
+    background-color: #acd7c6;
+    color: #2f2f2f;
+}
+
+.btn-comp:hover {
+    background-color: #09414B;
+    color: white;
 }
 
 .navbar-comp {
