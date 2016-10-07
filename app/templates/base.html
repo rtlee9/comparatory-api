@@ -30,9 +30,9 @@
     </div>
     <div class="navbar-collapse collapse" id="myNavbar">
       <ul class="navbar-nav nav">
-	<li><a href="/search">Search</a></li>
-	<li><a href="/explore">Explore</a></li>
-	<li><a href="#">Describe</a></li>
+	<li {% if page == 'search' %}class="active"{% endif %}><a href="/search">Search</a></li>
+	<li {% if page == 'explore' %}class="active"{% endif %}><a href="/explore">Explore</a></li>
+	<li {% if page == 'describe' %}class="active"{% endif %}><a href="#">Describe</a></li>
       </ul>
       <ul class="navbar-nav nav navbar-right">
 	<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>

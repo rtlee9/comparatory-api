@@ -131,7 +131,8 @@ def decomp_case(name):
 def graph():
     plot = get_scatter()
     script, div = components(plot)
-    return render_template('explore.html', script=script, div=div)
+    return render_template(
+        'explore.html', page='explore', script=script, div=div)
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -226,7 +227,7 @@ def index():
         plot = get_scatter(target, sim_ids)
         script, div = components(plot)
     return render_template(
-        'search.html', errors=errors, match=match,
+        'search.html', page='search', errors=errors, match=match,
         results=results, div=div, script=script)
 
 
