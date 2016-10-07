@@ -92,3 +92,7 @@ p {
 .navbar-nav {
     margin: 0 2px 0 2px;
 }
+
+body {
+    padding-top: 70px;
+}
