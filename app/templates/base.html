@@ -43,12 +43,22 @@
 </nav>
 {% endblock %}
 
+{% block content %}
+<div id="footer" class="row footer">
+  <p class="copyright text-muted">
+  Ryan Lee &nbsp;&bull;&nbsp; 2016 &nbsp;&bull;&nbsp;
+  <a href="http://www.comparatory.io">comparatory.io</a>
+  </p>
+</div>
+{% endblock %}
+
 {% block scripts %}
 {{super()}}
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="/static/autocomplete.js"></script>
 <script src="/static/toggle.js"></script>
+<script src="/static/footer.js"></script>
 <script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.2.min.js"></script>
 {{ script | safe }}
 {% endblock %}
