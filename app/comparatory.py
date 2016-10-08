@@ -292,7 +292,7 @@ def get_scatter(target=None, sim_ids=None):
     )
 
     TOOLS = "pan,wheel_zoom,box_zoom,reset,save"
-    plot = figure(tools=[hover, TOOLS])
+    plot = figure(tools=[hover, TOOLS], active_scroll='wheel_zoom')
     plot.scatter(
         'x', 'y', source=source, color=colors, alpha=.5, size=dot_size)
     plot.toolbar.logo = None
