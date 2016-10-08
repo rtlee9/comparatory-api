@@ -292,12 +292,13 @@ def get_scatter(target=None, sim_ids=None):
     )
 
     TOOLS = "pan,wheel_zoom,box_zoom,reset,save"
-    plot = figure(plot_width=800, tools=[hover, TOOLS])
+    plot = figure(tools=[hover, TOOLS], active_scroll='wheel_zoom')
     plot.scatter(
         'x', 'y', source=source, color=colors, alpha=.5, size=dot_size)
     plot.toolbar.logo = None
     plot.axis.visible = False
     plot.grid.visible = False
+    plot.sizing_mode = 'scale_width'
 
     # Zoom in on specified company
     if target is not None:
@@ -322,8 +323,6 @@ def get_scatter(target=None, sim_ids=None):
         plot.x_range.end = t_point['x1'] + z
         plot.y_range.start = t_point['x2'] - z
         plot.y_range.end = t_point['x2'] + z
-        plot.plot_width = 400
-        plot.plot_height = 400
 
     return plot
 

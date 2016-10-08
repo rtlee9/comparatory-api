@@ -3,6 +3,10 @@ p {
     font-weight: normal;
 }
 
+.row {
+    margin: 0 1px 0 1px;
+}
+
 body {
     padding-top: 70px;
 }
