@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="container">
   <h2>Search by company name</h2>
   <form role="form" method='POST' action='/search'>
@@ -48,11 +47,5 @@
     {% endif %}
   </div>
 </div>
-
-<div id="footer" class="row footer">
-  <p class="copyright text-muted">
-  Ryan Lee &nbsp;&bull;&nbsp; 2016 &nbsp;&bull;&nbsp;
-  <a href="comparatory.io">comparatory.io</a>
-  </p>
-</div>
+{{super()}}
 {%- endblock %}
