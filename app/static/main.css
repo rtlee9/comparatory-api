@@ -100,3 +100,15 @@ h1, h2, h3, h4, h5 {
 .navbar-nav {
     margin: 0 2px 0 2px;
 }
+
+.footer {
+  background: #F5F5F5;
+  border-top: 1px #EAEAEA solid;
+  height: 60px;
+  font-size: 14px;
+}
+
+.footer .copyright {
+  text-align: center;
+  margin-top: 22px;
+}
