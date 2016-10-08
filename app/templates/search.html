@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h2>Search by company name</h2>
+    <form role="form" method='POST' action='/search'>
+	<div class="form-group">
+	    <input type="text" name="company-name" class="form-control" id="cname-box" placeholder="Enter company name" style="max-width: 300px;" autofocus required>
+	</div>
+	<div class="container" id="as-container"></div>
+	<button type="submit" class="btn btn-comp">Submit</button>
+    </form>
+    <br>
+
+    <div id="searchfield">
+
+	{% for error in errors %}
+	<h4>{{ error }}</h4>
+	{% endfor %}
+
+	{% if match|length > 0 %}
+
+	<h4>Showing results for <b>{{ match['name'] }} [{{ match['sic_cd'] }}]<b></h4>
+	<a href="#" onclick="toggle_visibility('match_desc');">Show description</a>
+	<div class="pre-scrollable" id="match_desc" style="display:none;">
+	    {% for line in match['business_desc'] %}
+	    <p>{{ line }}</p>
+	    {% endfor %}
+	</div>
+	<br><br>
+
+	{% for result in results %}
+	<h4>{{ result['name'] }}</h4>
+	{% endfor %}
+
+	{% for key, value in results.iteritems() %}
+	<h4>{{ key }}. {{ value['name'] }} [{{ value['sic_cd'] }}] </h4>
+	<p><i>{{ value['sim_score'] }} similarity score </i></p>
+	<a href="#" onclick="toggle_visibility('{{ key }}');">Show description</a>
+	<div class="pre-scrollable" id="{{ key }}" style="display:none;">
+	    {% for line in value['business_desc'] %}
+	    <p>{{ line }}</p>
+	    {% endfor %}
+	</div>
+	{% endfor %}
+
+	{{ div | safe }}
+
+	{% endif %}
+
+    </div>
+</div>
+
+{%- endblock %}
