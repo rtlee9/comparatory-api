@@ -6,6 +6,9 @@ function set_bottom() {
   if (footerTop < docHeight) {
     $('#footer').css('margin-top', 0 + (docHeight - footerTop) + 'px');
   }
+  else {
+    $('#footer').css('margin-top', 30 + 'px');
+  }
 }
 
 $(document).ready(
