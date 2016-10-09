@@ -116,3 +116,60 @@ h1, h2, h3, h4, h5 {
   text-align: center;
   margin-top: 22px;
 }
+
+/* Sections */
+
+section {
+    padding: 60px 0;
+}
+
+.section-heading {
+    margin-top: 0;
+}
+
+.service-box {
+  max-width: 400px;
+  margin: 50px auto 0;
+}
+.service-box @media (min-width: 992px) {
+  margin: 20px auto 0;
+}
+.service-box p {
+  margin-bottom: 0;
+}
+
+#feature {
+    background-color: #F5F5F5;
+}
+
+hr {
+    border-color: #5db18f;
+    border-width: 3px;
+    max-width: 50px;
+}
+
+hr.light {
+    border-color: white;
+}
+
+/* Color theme */
+
+.green-primary {
+    color: #5DB18F;
+}
+
+.blue-primary {
+    color: #09414B;
+}
+
+.blue-secondary {
+    color: #61D0E4;
+}
+
+.highlight-primary {
+   color: #E4619C;
+}
+
+.highligh-secondary {
+   color: #BB9191;
+}
