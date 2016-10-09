@@ -134,6 +134,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/model', methods=['GET'])
+@auth.requires_auth
+def model():
+    return render_template('model.html')
+
+
 @app.route('/describe', methods=['GET'])
 @auth.requires_auth
 def describe():
