@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request, jsonify, g
+from flask import render_template_string
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 from elasticsearch import Elasticsearch, RequestsHttpConnection
@@ -13,9 +14,11 @@ import matplotlib.cm as cmx
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 from bokeh.embed import components
+from flask_sslify import SSLify
 
 
 app = Flask(__name__)
+sslify = SSLify(app)
 Bootstrap(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -361,6 +364,15 @@ def not_found(error):
 def internal_error(error):
     return render_template('500.html'), 500
 
+
+# Certbot challenge
+@app.route(
+    '/.well-known/acme-challenge/f2gt133TWnT8WE3VjOE6VurOSuCyXGxYW6lAezVgf2I',
+    methods=['GET'])
+def certbot():
+    return render_template_string(
+        'f2gt133TWnT8WE3VjOE6VurOSuCyXGxYW6lAezVgf2I.GUTB6fxBGPei6dIZp0XeqC'
+        'CJZXqyaihKgDOgo8CM3W8')
 
 if __name__ == '__main__':
     app.run()
