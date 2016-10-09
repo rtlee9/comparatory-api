@@ -127,6 +127,11 @@ def decomp_case(name):
     return name.upper().replace("'", "''")
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
+
+
 @app.route('/explore', methods=['GET'])
 def graph():
     plot = get_scatter()
@@ -137,7 +142,7 @@ def graph():
 
 @app.route('/search', methods=['GET', 'POST'])
 @auth.requires_auth
-def index():
+def search():
 
     es = get_es()
     cursor = get_db()
