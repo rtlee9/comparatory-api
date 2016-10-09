@@ -6,6 +6,11 @@
     <h2>Explore</h2>
 
     {{ div | safe }}
+
+  <div class="row" style="margin-top: 30px;">
+    {% include "explanation.html" %}
+  </div>
+
 </div>
 {{super()}}
 {% endblock %}
