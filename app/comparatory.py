@@ -14,9 +14,11 @@ import matplotlib.cm as cmx
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 from bokeh.embed import components
+from flask_sslify import SSLify
 
 
 app = Flask(__name__)
+sslify = SSLify(app)
 Bootstrap(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
