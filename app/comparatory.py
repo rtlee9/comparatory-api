@@ -106,6 +106,7 @@ def close_db(error):
 
 
 @app.route('/autocomplete', methods=['GET'])
+@auth.requires_auth
 def autocomplete(max_results=10):
     es = get_es()
     target_name = request.args.get('q')
@@ -128,11 +129,13 @@ def decomp_case(name):
 
 
 @app.route('/', methods=['GET'])
+@auth.requires_auth
 def index():
     return render_template('index.html')
 
 
 @app.route('/explore', methods=['GET'])
+@auth.requires_auth
 def graph():
     plot = get_scatter()
     script, div = components(plot)
