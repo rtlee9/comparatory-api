@@ -9,7 +9,7 @@
 	<input type="text" name="company-name" class="form-control" id="cname-box" placeholder="Enter company name" style="max-width: 300px;" autofocus required>
       </div>
       <div class="container" id="as-container"></div>
-      <button type="submit" class="btn btn-comp">Submit</button>
+      <button type="submit" class="btn btn-default btn-comp">Submit</button>
     </form>
     <br>
   </div>
@@ -46,8 +46,15 @@
   </div>
 
   <!-- Output zoomed scatter plot -->
-  <div class="row col-sm-8" style="margin-top: 30px;">
-    {{ div | safe }}
+  <div class="row" style="margin-top: 30px;">
+    <div class="col-sm-8">
+      {{ div | safe }}
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+  <div class="row" style="margin-top: 30px;">
+    {% include "interpretation.html" %}
   </div>
 
   {% endif %}
