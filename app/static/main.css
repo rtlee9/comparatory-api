@@ -8,7 +8,7 @@ p {
 }
 
 body {
-    padding-top: 70px;
+    padding-top: 53px;
 }
 
 a {
@@ -33,6 +33,10 @@ h1, h2, h3, h4, h5 {
     max-width: 1000px;
     display: block;
     position: relative;
+}
+
+.container-first {
+    margin-top: 17px;
 }
 
 .ui-autocomplete {
@@ -138,7 +142,7 @@ section {
   margin-bottom: 0;
 }
 
-#feature {
+.background-grey {
     background-color: #F5F5F5;
 }
 
