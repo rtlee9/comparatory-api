@@ -2,12 +2,13 @@ function set_bottom() {
   var docHeight = $(window).height();
   var footerHeight = $('#footer').outerHeight();
   var footerTop = $('#footer').position().top + footerHeight;
+  var footerBuffer = 30
 
-  if (footerTop < docHeight) {
+  if (footerTop < docHeight - footerBuffer) {
     $('#footer').css('margin-top', 0 + (docHeight - footerTop) + 'px');
   }
   else {
-    $('#footer').css('margin-top', 30 + 'px');
+    $('#footer').css('margin-top', footerBuffer + 'px');
   }
 }
 
