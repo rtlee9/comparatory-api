@@ -16,6 +16,7 @@ $(document).ready(
   set_bottom(),
   setTimeout(set_bottom, 1000),
   setTimeout(set_bottom, 1000),
+  setTimeout(set_bottom, 1000),
   setTimeout(set_bottom, 2000)
 );
 
