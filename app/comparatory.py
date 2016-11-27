@@ -5,7 +5,6 @@ import psycopg2
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
-import auth.http_basic as auth
 import re
 import pandas as pd
 import matplotlib as mpl
@@ -108,7 +107,6 @@ def close_db(error):
 
 
 @app.route('/autocomplete', methods=['GET'])
-@auth.requires_auth
 def autocomplete(max_results=10):
     es = get_es()
     target_name = request.args.get('q')
@@ -131,25 +129,21 @@ def decomp_case(name):
 
 
 @app.route('/', methods=['GET'])
-@auth.requires_auth
 def index():
     return render_template('index.html')
 
 
 @app.route('/model', methods=['GET'])
-@auth.requires_auth
 def model():
     return render_template('model.html')
 
 
 @app.route('/describe', methods=['GET'])
-@auth.requires_auth
 def describe():
     return render_template('describe.html')
 
 
 @app.route('/explore', methods=['GET'])
-@auth.requires_auth
 def graph():
     plot = get_scatter()
     script, div = components(plot)
@@ -158,7 +152,6 @@ def graph():
 
 
 @app.route('/search', methods=['GET', 'POST'])
-@auth.requires_auth
 def search():
 
     es = get_es()
