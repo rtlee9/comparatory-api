@@ -3,6 +3,10 @@ p {
     font-weight: normal;
 }
 
+.text-justify {
+  text-align: justify;
+}
+
 .row {
     margin: 0 1px 0 1px;
 }
