@@ -5,7 +5,6 @@ import psycopg2
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 from flask_bootstrap import Bootstrap
-import auth.http_basic as auth
 import re
 import pandas as pd
 import matplotlib as mpl
@@ -14,6 +13,7 @@ from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 from bokeh.embed import components
 from flask_sslify import SSLify
+from flask_stormpath import StormpathManager, login_required, user
 
 
 app = Flask(__name__)
@@ -23,11 +23,26 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# AWS credentials
 AWS_RDS_HOST = os.environ['AWS_RDS_HOST']
 AWS_RDS_USER = os.environ['AWS_RDS_USER']
 AWS_RDS_PASSWORD = os.environ['AWS_RDS_PASSWORD']
 AWS_ES_ACCESS_KEY = os.environ['***REMOVED***']
 AWS_ES_SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+# OAuth credentials and configuration
+app.config['SECRET_KEY'] = os.environ['STORMPATH_SECRET_KEY']
+app.config['STORMPATH_API_KEY_ID'] = os.environ['STORMPATH_API_KEY_ID']
+app.config['STORMPATH_API_KEY_SECRET'] = os.environ['STORMPATH_API_KEY_SECRET']
+app.config['STORMPATH_APPLICATION'] = os.environ['STORMPATH_APPLICATION']
+app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
+app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
+stormpath_manager = StormpathManager(app)
+
+
+@app.context_processor
+def inject_user():
+    return dict(is_authenticated=user.is_authenticated)
 
 
 def set_scatter_data():
@@ -108,7 +123,6 @@ def close_db(error):
 
 
 @app.route('/autocomplete', methods=['GET'])
-@auth.requires_auth
 def autocomplete(max_results=10):
     es = get_es()
     target_name = request.args.get('q')
@@ -131,25 +145,24 @@ def decomp_case(name):
 
 
 @app.route('/', methods=['GET'])
-@auth.requires_auth
 def index():
     return render_template('index.html')
 
 
 @app.route('/model', methods=['GET'])
-@auth.requires_auth
+@login_required
 def model():
     return render_template('model.html')
 
 
 @app.route('/describe', methods=['GET'])
-@auth.requires_auth
+@login_required
 def describe():
     return render_template('describe.html')
 
 
 @app.route('/explore', methods=['GET'])
-@auth.requires_auth
+@login_required
 def graph():
     plot = get_scatter()
     script, div = components(plot)
@@ -158,7 +171,7 @@ def graph():
 
 
 @app.route('/search', methods=['GET', 'POST'])
-@auth.requires_auth
+@login_required
 def search():
 
     es = get_es()
