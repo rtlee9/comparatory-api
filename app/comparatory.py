@@ -13,7 +13,7 @@ from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 from bokeh.embed import components
 from flask_sslify import SSLify
-from flask_stormpath import StormpathManager
+from flask_stormpath import StormpathManager, login_required
 
 
 app = Flask(__name__)
@@ -143,16 +143,19 @@ def index():
 
 
 @app.route('/model', methods=['GET'])
+@login_required
 def model():
     return render_template('model.html')
 
 
 @app.route('/describe', methods=['GET'])
+@login_required
 def describe():
     return render_template('describe.html')
 
 
 @app.route('/explore', methods=['GET'])
+@login_required
 def graph():
     plot = get_scatter()
     script, div = components(plot)
@@ -161,6 +164,7 @@ def graph():
 
 
 @app.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
 
     es = get_es()
