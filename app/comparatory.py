@@ -13,7 +13,7 @@ from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 from bokeh.embed import components
 from flask_sslify import SSLify
-from flask_stormpath import StormpathManager, login_required
+from flask_stormpath import StormpathManager, login_required, user
 
 
 app = Flask(__name__)
@@ -38,6 +38,11 @@ app.config['STORMPATH_APPLICATION'] = os.environ['STORMPATH_APPLICATION']
 app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
 app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
 stormpath_manager = StormpathManager(app)
+
+
+@app.context_processor
+def inject_user():
+    return dict(is_authenticated=user.is_authenticated)
 
 
 def set_scatter_data():

@@ -38,8 +38,12 @@
 	<li {% if page == 'model' %}class="active"{% endif %}><a href="/model">Model</a></li>
       </ul>
       <ul class="navbar-nav nav navbar-right">
-	<li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+	{% if is_authenticated == false %}
+	<li><a href="/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
 	<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+	{% else %}
+	<li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+	{% endif %}
       </ul>
     </div>
   </div>
