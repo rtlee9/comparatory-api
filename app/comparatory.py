@@ -30,11 +30,12 @@ AWS_RDS_PASSWORD = os.environ['AWS_RDS_PASSWORD']
 AWS_ES_ACCESS_KEY = os.environ['***REMOVED***']
 AWS_ES_SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 
-# OAuth credentials
+# OAuth credentials and configuration
 app.config['SECRET_KEY'] = os.environ['STORMPATH_SECRET_KEY']
 app.config['STORMPATH_API_KEY_ID'] = os.environ['STORMPATH_API_KEY_ID']
 app.config['STORMPATH_API_KEY_SECRET'] = os.environ['STORMPATH_API_KEY_SECRET']
 app.config['STORMPATH_APPLICATION'] = os.environ['STORMPATH_APPLICATION']
+app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
 stormpath_manager = StormpathManager(app)
 
 
