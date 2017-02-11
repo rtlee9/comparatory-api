@@ -1,15 +1,13 @@
-from flask import Flask, render_template, request, jsonify, g
+from flask import render_template, request, jsonify, g
 from flask_stormpath import login_required, user
 from bokeh.embed import components
 
+from app import app
 from connect import get_es
-from config import set_config
 from utils import comp_case
 from visualizations import get_scatter
 from search import get_sim_results
 
-app = Flask(__name__)
-set_config(app)
 
 @app.context_processor
 def inject_user():
