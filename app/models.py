@@ -1,37 +1,17 @@
 from app import db
+import datetime
 
 
-class Company(db.Model):
-    __tablename__ = 'company_dets'
-    __searchable__ = ['company_conformed_name']
-
+class Sim_search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sic_cd = db.Column(db.String(4))
-    company_conformed_name = db.Column(db.String())
-    business_description = db.Column(db.String())
+    user_id = db.Column(db.String())
+    search_string = db.Column(db.String())
+    datetime = db.Column(
+        db.DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, id, sic_cd, company_conformed_name,
-                 business_description):
-        self.id = id
-        self.sic_cd = sic_cd
-        self.company_conformed_name = company_conformed_name
-        self.business_description = business_description
+    def __init__(self, user_id, search_string):
+        self.user_id = user_id
+        self.search_string = search_string
 
     def __repr__(self):
-        return '<id {}: {}>'.format(self.id, self.company_conformed_name)
-
-
-class Sim(db.Model):
-    __tablename__ = 'sims'
-
-    id = db.Column(db.String(), primary_key=True)
-    sim_id = db.Column(db.String(), db.ForeignKey('sim.id'))
-    sim_score = db.Column(db.Integer())
-
-    def __init__(self, id, sim_id, sim_score):
-        self.id = id
-        self.sim_id = sim_id
-        self.sim_score = sim_score
-
-    def __repr__(self):
-        return '<id {}: sim_id {}>'.format(self.id, self.sim_id)
+        return '<{}: {}>'.format(self.user_id, self.search_string)

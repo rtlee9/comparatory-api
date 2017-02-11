@@ -14,8 +14,8 @@ def set_config(app):
 
     # Set up SQLAlchemy DB
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db = SQLAlchemy(app)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    db = SQLAlchemy(app)
 
     # AWS credentials
     app.config['AWS_RDS_HOST'] = os.environ['AWS_RDS_HOST']
