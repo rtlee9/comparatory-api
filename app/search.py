@@ -1,6 +1,9 @@
 from flask import request
+from flask_stormpath import user
 
+from app import db
 from connect import get_db, get_es
+from models import Sim_search
 from utils import decomp_case, comp_case, clean_desc
 
 def get_top_sims():
@@ -14,6 +17,11 @@ def get_top_sims():
         'comparatory', 'company', es_query)['hits']['hits']
     assert len(resp) == 1
     name_match = [d['_source']['NAME'].upper() for d in resp][0]
+
+    # Save search to db
+    _search = Sim_search(user.get_id(), cname)
+    db.session.add(_search)
+    db.session.commit()
 
     # Find next most similar
     query = """

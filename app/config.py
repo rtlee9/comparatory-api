@@ -11,8 +11,11 @@ def set_config(app):
     SSLify(app)
     Bootstrap(app)
     app.config.from_object(os.environ['APP_SETTINGS'])
+
+    # Set up SQLAlchemy DB
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    SQLAlchemy(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    db = SQLAlchemy(app)
 
     # AWS credentials
     app.config['AWS_RDS_HOST'] = os.environ['AWS_RDS_HOST']
@@ -29,3 +32,5 @@ def set_config(app):
     app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
     app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
     StormpathManager(app)
+
+    return db
