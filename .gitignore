@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 set_environ.sh
+todo.md
 
 # C extensions
 *.so

@@ -1,7 +1,7 @@
-curl -XGET "***REMOVED***comparatory/_count" -d'
+curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/_count" -d'
 {}'
 
-curl -XGET "***REMOVED***comparatory/_search" -d'
+curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/_search" -d'
 {
   "query": {
     "match_phrase_prefix": {
@@ -14,7 +14,7 @@ curl -XGET "***REMOVED***comparatory/_search" -d'
 }'
 
 # Get explanation for above query
-curl -XGET "***REMOVED***comparatory/company/_validate/query?explain" -d'
+curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/company/_validate/query?explain" -d'
 {
   "query": {
     "match_phrase_prefix": {
@@ -26,7 +26,7 @@ curl -XGET "***REMOVED***comparatory/company/_validate/query?explain" -d'
   }
 }'
 
-curl -XGET "***REMOVED***comparatory/_search" -d'
+curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/_search" -d'
 {
   "query": {
     "match": {
@@ -36,7 +36,7 @@ curl -XGET "***REMOVED***comparatory/_search" -d'
 }'
 
 # Get explanation for above query
-curl -XGET "***REMOVED***comparatory/company/_validate/query?explain" -d'
+curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/company/_validate/query?explain" -d'
 {
   "query": {
     "match": {
