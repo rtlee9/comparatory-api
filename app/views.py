@@ -35,6 +35,11 @@ def autocomplete(max_results=10):
     return jsonify(matching_results=names)
 
 
+@app.route('/google9f59cd107587c112.html', methods=['GET'])
+def google():
+    return render_template('google9f59cd107587c112.html')
+
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
