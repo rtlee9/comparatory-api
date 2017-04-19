@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, g
+from flask import render_template, request, jsonify, g, make_response
 from flask_stormpath import login_required, user
 from bokeh.embed import components
 
@@ -33,6 +33,19 @@ def autocomplete(max_results=10):
 
     names = [comp_case(d['_source']['NAME']) for d in resp]
     return jsonify(matching_results=names)
+
+
+@app.route('/google9f59cd107587c112.html', methods=['GET'])
+def google():
+    return render_template('google9f59cd107587c112.html')
+
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    sitemap_xml = render_template('sitemap.xml')
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+    return response
 
 
 @app.route('/', methods=['GET'])
