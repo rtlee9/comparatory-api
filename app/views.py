@@ -68,7 +68,7 @@ def describe():
 @app.route('/explore', methods=['GET'])
 @login_required
 def graph():
-    plot = get_scatter()
+    global plot
     script, div = components(plot)
     return render_template(
         'explore.html', page='explore', script=script, div=div)
@@ -121,6 +121,9 @@ def not_found(error):
 def internal_error(error):
     return render_template('500.html'), 500
 
+
+with app.app_context():
+    plot = get_scatter()
 
 if __name__ == '__main__':
     app.run()
