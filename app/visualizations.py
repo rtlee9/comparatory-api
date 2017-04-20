@@ -1,4 +1,3 @@
-from flask import g
 import pandas as pd
 
 import matplotlib as mpl
@@ -10,7 +9,7 @@ from connect import get_db
 from utils import comp_case
 
 
-def set_scatter_data():
+def get_scatter_data():
     cursor = get_db()
     cursor.execute(
         'select E.X1, E.X2, C.sic_cd, C.name, C.id '
@@ -19,12 +18,6 @@ def set_scatter_data():
     SNE_vecs = cursor.fetchall()
     colnames = [desc[0] for desc in cursor.description]
     return pd.DataFrame(SNE_vecs, columns=colnames)
-
-
-def get_scatter_data():
-    if not hasattr(g, 'vecs'):
-        g.vecs = set_scatter_data()
-    return g.vecs
 
 
 def get_scatter(target=None, sim_ids=None):
