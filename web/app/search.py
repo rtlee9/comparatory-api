@@ -1,22 +1,33 @@
 from flask import request
+from flask_restful import Resource
 from flask_stormpath import user
 
-from app import db
+from app import db, api
 from connect import get_db, get_es
 from models import Sim_search
 from utils import decomp_case, comp_case, clean_desc
 
 
+class SimilarCompanies(Resource):
+
+    def post(self):
+        top_sims, match, target, results, sim_ids = get_sim_results()
+        return {
+            'match': match,
+            'results': results,
+        }
+
+
 def get_top_sims():
     es = get_es()
     cursor = get_db()
-    cname = request.form['company-name']
+    cname = request.args['company-name']
     es_query = {"query": {"match": {
         "NAME": cname}},
         "_source": "NAME", "size": 1}
     resp = es.search(
         'comparatory', 'company', es_query)['hits']['hits']
-    assert len(resp) == 1
+    assert len(resp) == 1, resp
     name_match = [d['_source']['NAME'].upper() for d in resp][0]
 
     # Save search to db
@@ -99,3 +110,5 @@ def get_sim_results():
     target = top_sims[0][0]
     results, sim_ids = parse_sims(top_sims)
     return top_sims, match, target, results, sim_ids
+
+api.add_resource(SimilarCompanies, '/sim')
