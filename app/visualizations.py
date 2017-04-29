@@ -1,12 +1,20 @@
 import pandas as pd
+from flask_restful import Resource
 
 import matplotlib as mpl
 import matplotlib.cm as cmx
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 
+from app import api
 from connect import get_db
 from utils import comp_case
+
+
+class PlotData(Resource):
+
+    def get(self):
+        return get_scatter_data().to_json()
 
 
 def get_scatter_data():
@@ -107,3 +115,6 @@ def get_scatter(target=None, sim_ids=None):
         plot.y_range.end = t_point['x2'] + z
 
     return plot
+
+
+api.add_resource(PlotData, '/plot')
