@@ -6,6 +6,7 @@ from connect import get_db, get_es
 from models import Sim_search
 from utils import decomp_case, comp_case, clean_desc
 
+
 def get_top_sims():
     es = get_es()
     cursor = get_db()
@@ -62,6 +63,7 @@ def get_top_sims():
     cursor.execute(query)
     return(cursor.fetchall())
 
+
 def parse_matches(top_sims):
     """Parse target company details based on SQL query
     """
@@ -70,6 +72,7 @@ def parse_matches(top_sims):
     match['sic_cd'] = str(top_sims[0][2])
     match['business_desc'] = clean_desc(top_sims[0][22])
     return match
+
 
 def parse_sims(top_sims, num_sims=5):
     """Parse list of most similar companies based on SQL query
@@ -88,6 +91,7 @@ def parse_sims(top_sims, num_sims=5):
         }
         sim_ids.append(next_b[12])
     return results, sim_ids
+
 
 def get_sim_results():
     top_sims = get_top_sims()

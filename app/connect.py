@@ -5,12 +5,14 @@ from flask import g
 from requests_aws4auth import AWS4Auth
 from flask import current_app as app
 
+
 # Connect to AWS RDS
 def _connect_db():
-    conn_string = "host='" + app.config['AWS_RDS_HOST'] + \
-                  "' dbname='comparatory' user='" + app.config['AWS_RDS_USER'] + \
-                  "' password='" + app.config['AWS_RDS_PASSWORD'] + "'"
-    conn = psycopg2.connect(conn_string)
+    conn_str = "host='{}' dbname='comparatory' user='{}' password='{}'".format(
+        app.config['AWS_RDS_HOST'],
+        app.config['AWS_RDS_USER'],
+        app.config['AWS_RDS_PASSWORD'])
+    conn = psycopg2.connect(conn_str)
     return conn.cursor()
 
 
@@ -24,8 +26,11 @@ def _connect_db_local():
 # Connnect to AWS elasticsearch
 def _connect_es():
     host = os.environ['ES_HOST']
-    awsauth = AWS4Auth(app.config['AWS_ES_ACCESS_KEY'], app.config['AWS_ES_SECRET_KEY'],
-                       'us-east-1', 'es')
+    awsauth = AWS4Auth(
+        app.config['AWS_ES_ACCESS_KEY'],
+        app.config['AWS_ES_SECRET_KEY'],
+        'us-east-1',
+        'es')
     es = Elasticsearch(
         hosts=[host],
         http_auth=awsauth,

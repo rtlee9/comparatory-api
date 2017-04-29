@@ -4,8 +4,10 @@ import re
 def comp_case(name):
     return " ".join(w.capitalize() for w in name.split())
 
+
 def decomp_case(name):
     return name.upper().replace("'", "''")
+
 
 def clean_desc(raw):
     despaced = ' '.join(filter(lambda x: x != '', raw.split(' ')))
