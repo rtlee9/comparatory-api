@@ -13,8 +13,8 @@ class SimilarCompanies(Resource):
     def post(self):
         top_sims, match, target, results, sim_ids = get_sim_results()
         return {
-            'match': match,
-            'results': results,
+            'match': dict(key=target, **match),
+            'results': dict(keys=sim_ids, **results),
         }
 
 
