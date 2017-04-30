@@ -8,6 +8,6 @@ db = set_config(app)
 
 api = Api(app)
 
-from app import models, search, visualizations
+from app import search, visualizations
 db.create_all()
 db.session.commit()
