@@ -1,10 +1,9 @@
 FROM python:2.7
 MAINTAINER Ryan Lee "ryantlee9@gmail.com"
-#RUN apt-get update -y
+RUN apt-get update -y
 COPY . /comparatory
 WORKDIR /comparatory
-#RUN pip install --upgrade pip
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-EXPOSE 8080
 ENTRYPOINT ["gunicorn", "--config=gunicorn.py"]
 CMD ["app:app"]
