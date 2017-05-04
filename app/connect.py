@@ -1,8 +1,7 @@
 import os
 import psycopg2
-from elasticsearch import Elasticsearch, RequestsHttpConnection
+from elasticsearch import Elasticsearch
 from flask import g
-from requests_aws4auth import AWS4Auth
 from flask import current_app as app
 
 
@@ -26,24 +25,7 @@ def _connect_db_local():
 # Connnect to AWS elasticsearch
 def _connect_es():
     host = os.environ['ES_HOST']
-    awsauth = AWS4Auth(
-        app.config['AWS_ES_ACCESS_KEY'],
-        app.config['AWS_ES_SECRET_KEY'],
-        'us-east-1',
-        'es')
-    es = Elasticsearch(
-        hosts=[host],
-        http_auth=awsauth,
-        use_ssl=True,
-        verify_certs=True,
-        connection_class=RequestsHttpConnection
-    )
-    return es
-
-
-# Connnect to local elasticsearch
-def _connect_es_local():
-    es = Elasticsearch()
+    es = Elasticsearch(host)
     return es
 
 
