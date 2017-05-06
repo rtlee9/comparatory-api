@@ -12,9 +12,13 @@ from utils import comp_case
 
 
 class PlotData(Resource):
-
     def get(self):
         return get_scatter_data().to_json()
+
+
+class Plots(Resource):
+    def get(self):
+        return get_scatter_data().to_dict(orient='records')
 
 
 def get_scatter_data():
@@ -118,3 +122,4 @@ def get_scatter(target=None, sim_ids=None):
 
 
 api.add_resource(PlotData, '/plot')
+api.add_resource(Plots, '/plots')

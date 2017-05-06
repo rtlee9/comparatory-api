@@ -7,12 +7,25 @@ from utils import decomp_case, comp_case, clean_desc
 
 
 class SimilarCompanies(Resource):
-
     def post(self):
         top_sims, match, target, results, sim_ids = get_sim_results()
         return {
             'match': dict(key=target, data=match),
             'results': dict(keys=sim_ids, data=results),
+        }
+
+
+class CompaniesPeers(Resource):
+    def post(self):
+        top_sims, match, target, results, sim_ids = get_sim_results()
+        match.pop('business_desc')
+        for v in results.values():
+            v.pop('business_desc')
+        return {
+            'match': dict(key=target, **match),
+            'results': {
+                sim_ids[k - 1]: dict(rank=k, **v) for k, v in results.items()
+            },
         }
 
 
@@ -105,3 +118,4 @@ def get_sim_results():
     return top_sims, match, target, results, sim_ids
 
 api.add_resource(SimilarCompanies, '/sim')
+api.add_resource(CompaniesPeers, '/companies/peers')

@@ -1,0 +1,153 @@
+#%RAML 1.0
+title: Comparatory
+description: API to identify similar companies
+version: v1
+baseUri: http://api.comparatory.io
+
+/companies/peers:
+  description: Resource to identify similar companies
+  post:
+    description: "Get list of similar companies"
+    queryParameters:
+      company-name:
+        displayName: "Company name"
+        type: string
+        description: "A company's business name"
+        required: true
+        example: "Pepsico Inc"
+    responses:
+      200:
+        description: Company found, similar companies identified
+        body:
+          application/json:
+            example: |
+              {
+                  "match": {
+                      "key": "21344_10-K_2015-02-25.txt",
+                      "name": "Coca Cola Co",
+                      "sic_cd": "2080"
+                  },
+                  "results": {
+                      "1418135_10-K_2015-02-19.txt": {
+                          "name": "Dr Pepper Snapple Group Inc",
+                          "rank": 3,
+                          "sic_cd": "2080",
+                          "sim_score": "77%"
+                      },
+                      "1491675_10-K_2015-02-12.txt": {
+                          "name": "Coca-cola Enterprises Inc",
+                          "rank": 2,
+                          "sic_cd": "2086",
+                          "sim_score": "80%"
+                      },
+                      "77476_10-K_2015-02-12.txt": {
+                          "name": "Pepsico Inc",
+                          "rank": 5,
+                          "sic_cd": "2080",
+                          "sim_score": "75%"
+                      },
+                      "865752_10-K_2015-03-02.txt": {
+                          "name": "Monster Beverage Corp",
+                          "rank": 1,
+                          "sic_cd": "2086",
+                          "sim_score": "80%"
+                      },
+                      "884713_10-K_2015-03-04.txt": {
+                          "name": "Cott Corp",
+                          "rank": 4,
+                          "sic_cd": "2086",
+                          "sim_score": "75%"
+                      }
+                  }
+              }
+      400:
+        description: Company not found
+
+/plots:
+  description: Resource for plotting companies
+  get:
+    description: Get plot points for 2d reduced embeddings
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              [
+                  {
+                      "id": "38725_10-K_2015-03-04.txt",
+                      "name": "FRANKLIN ELECTRIC CO INC",
+                      "sic_cd": "3621",
+                      "x1": 3.69243,
+                      "x2": 0.188216
+                  },
+                  {
+                      "id": "1444598_10-K_2015-03-16.txt",
+                      "name": "EMDEON INC",
+                      "sic_cd": "7389",
+                      "x1": -7.35893,
+                      "x2": 1.82336
+                  },
+                  {
+                      "id": "860413_10-K_2015-03-02.txt",
+                      "name": "FIRST INTERSTATE BANCSYSTEM INC",
+                      "sic_cd": "6022",
+                      "x1": -4.3126,
+                      "x2": 10.5318
+                  },
+                  {
+                      "id": "1453001_10-K_2015-04-15.txt",
+                      "name": "VACCINOGEN INC",
+                      "sic_cd": "2834",
+                      "x1": -6.38592,
+                      "x2": -6.59124
+                  },
+                  {
+                      "id": "1022469_10-K_2015-03-03.txt",
+                      "name": "DELTIC TIMBER CORP",
+                      "sic_cd": "2421",
+                      "x1": 6.70578,
+                      "x2": 4.76582
+                  },
+                  {
+                      "id": "1328571_10-K_2015-02-26.txt",
+                      "name": "NTELOS HOLDINGS CORP",
+                      "sic_cd": "4813",
+                      "x1": -0.966837,
+                      "x2": 2.43435
+                  },
+                  {
+                      "id": "1563756_10-K_2015-03-31.txt",
+                      "name": "LIGHTSTONE VALUE PLUS REAL ESTATE INVESTMENT TRUST III INC",
+                      "sic_cd": "6798",
+                      "x1": 5.14768,
+                      "x2": 8.67505
+                  },
+                  {
+                      "id": "79958_10-K_2015-05-28.txt",
+                      "name": "PRECISION CASTPARTS CORP",
+                      "sic_cd": "3320",
+                      "x1": 1.95168,
+                      "x2": 0.426964
+                  },
+                  {
+                      "id": "1068717_10-K_2015-02-26.txt",
+                      "name": "RTI INTERNATIONAL METALS INC",
+                      "sic_cd": "3350",
+                      "x1": 2.82072,
+                      "x2": 0.379765
+                  },
+                  {
+                      "id": "1407583_10-K_2015-09-28.txt",
+                      "name": "LIBERTY SILVER CORP",
+                      "sic_cd": "1000",
+                      "x1": 10.4744,
+                      "x2": 0.0549198
+                  },
+                  {
+                      "id": "1133421_10-K_2015-02-02.txt",
+                      "name": "NORTHROP GRUMMAN CORP",
+                      "sic_cd": "3812",
+                      "x1": -1.43065,
+                      "x2": -0.0599472
+                  }
+              ]
