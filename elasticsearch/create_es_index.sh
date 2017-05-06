@@ -1,12 +1,12 @@
 #! /bin/bash
 
-curl -XDELETE "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory"
+curl -XDELETE "localhost:9200/comparatory"
 
 
 # Create `my_index` with a single primary shard
 # and set up the `autocomplete` analyzer using
 # edge ngrams
-curl -XPUT "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory" -d'
+curl -XPUT "localhost:9200/comparatory" -d'
 {
   "settings": {
     "number_of_shards": 3,
@@ -33,7 +33,7 @@ curl -XPUT "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.a
 }'
 
 # Test the autocomplete analyzer
-curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/_analyze" -d'
+curl -XGET "localhost:9200/comparatory/_analyze" -d'
 {
   "analyzer": "autocomplete",
   "text": "quick brown"
@@ -42,7 +42,7 @@ curl -XGET "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.a
 # Set the mapping for the `name` field
 # to use the "autocomplete" analyzer at index time
 # and the "standard" analyzer at search time
-curl -XPUT "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.amazonaws.com/comparatory/company/_mapping" -d'
+curl -XPUT "localhost:9200/comparatory/company/_mapping" -d'
 {
   "company": {
     "properties": {
@@ -58,5 +58,3 @@ curl -XPUT "https://search-comparatory-q63ccyabfwf2hcitoumz3wuuxi.us-east-1.es.a
     }
   }
 }'
-
-python load_ES.py
