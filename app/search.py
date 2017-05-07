@@ -7,7 +7,7 @@ from utils import decomp_case, comp_case, clean_desc
 
 
 class SimilarCompanies(Resource):
-    def post(self):
+    def get(self):
         top_sims, match, target, results, sim_ids = get_sim_results()
         return {
             'match': dict(key=target, data=match),
@@ -16,7 +16,7 @@ class SimilarCompanies(Resource):
 
 
 class CompaniesPeers(Resource):
-    def post(self):
+    def get(self):
         top_sims, match, target, results, sim_ids = get_sim_results()
         match.pop('business_desc')
         for v in results.values():
