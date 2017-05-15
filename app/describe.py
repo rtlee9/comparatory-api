@@ -5,19 +5,33 @@ import json
 from sklearn.externals import joblib
 from sklearn.metrics.pairwise import cosine_similarity
 from flask_restful import Resource
+from urllib import urlretrieve
+import zipfile
 
 from app import api
 from utils import load_sparse_csr
-from config import path_models
+from config import path_models, path_app, path_modelzip
 
 
 # load TF-IDF model
-tfidf_vecs = load_sparse_csr(path.join(path_models, 'tfidf_weights.npz'))
-vectorizer = joblib.load(path.join(path_models, 'tfidf_vectorizer.pkl'))
-with open(path.join(path_models, 'tfidf_dets.json'), 'r') as f:
-    tfidf_dets = json.loads(json.load(f))
-with open(path.join(path_models, 'tfidf_ordered_keys.txt'), 'r') as f:
-    tfidf_keys = [l.rstrip() for l in f.readlines()]
+def load_tfidf():
+    tfidf_vecs = load_sparse_csr(path.join(path_models, 'tfidf_weights.npz'))
+    vectorizer = joblib.load(path.join(path_models, 'tfidf_vectorizer.pkl'))
+    with open(path.join(path_models, 'tfidf_dets.json'), 'r') as f:
+        tfidf_dets = json.loads(json.load(f))
+    with open(path.join(path_models, 'tfidf_ordered_keys.txt'), 'r') as f:
+        tfidf_keys = [l.rstrip() for l in f.readlines()]
+    return tfidf_vecs, vectorizer, tfidf_dets, tfidf_keys
+
+try:
+    tfidf_vecs, vectorizer, tfidf_dets, tfidf_keys = load_tfidf()
+except:
+    zip_path = path.join(path_app, 'models.zip')
+    urlretrieve(path_modelzip, zip_path)
+    zip_ref = zipfile.ZipFile(zip_path, 'r')
+    zip_ref.extractall(path_app)
+    zip_ref.close()
+    tfidf_vecs, vectorizer, tfidf_dets, tfidf_keys = load_tfidf()
 
 
 class Describe(Resource):
