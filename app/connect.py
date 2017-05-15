@@ -12,7 +12,6 @@ def _connect_db():
         app.config['RDS_PASSWORD'],
         app.config['RDS_HOST'],
     )
-    print(conn_str)
     conn = psycopg2.connect(conn_str)
     return conn.cursor()
 
