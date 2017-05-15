@@ -17,6 +17,7 @@ def clean_desc(raw):
     desc = item1.sub('', despaced).strip()
     return filter(lambda x: x != '', desc.split('\n'))
 
+
 def save_sparse_csr(filename, array):
     np.savez(
         filename,
@@ -25,6 +26,7 @@ def save_sparse_csr(filename, array):
         indptr=array.indptr,
         shape=array.shape,
     )
+
 
 def load_sparse_csr(filename):
     loader = np.load(filename)
