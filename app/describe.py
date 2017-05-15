@@ -53,7 +53,7 @@ class Describe(Resource):
             top_sims.append(dict(
                 id=key,
                 rank=rank + 1,
-                name=dets['COMPANY CONFORMED NAME'],
+                name=comp_case(dets['COMPANY CONFORMED NAME']),
                 sic_cd=dets['SIC_CD'],
                 sim_score='{:.0f}%'.format(cs[i] * 100),
                 ))
