@@ -39,6 +39,8 @@ class Describe(Resource):
         desc = request.args['company-description']
         target_vec = vectorizer.transform([desc])
         cs = cosine_similarity(target_vec, tfidf_vecs)[0]
+        if cs.sum() < .0001:
+            return {}
         top_n = 5
         ind = np.argpartition(cs, -top_n)[-top_n:]
         ind = ind[np.argsort(-cs[ind])]
