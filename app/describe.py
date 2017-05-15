@@ -46,24 +46,25 @@ class Describe(Resource):
         top_n = 5
         ind = np.argpartition(cs, -top_n)[-top_n:]
         ind = ind[np.argsort(-cs[ind])]
-        top_sims = {}
+        top_sims = []
         for rank, i in enumerate(ind):
             key = tfidf_keys[i]
             dets = tfidf_dets[key]
-            top_sims[key] = dict(
+            top_sims.append(dict(
+                id=key,
                 rank=rank + 1,
                 name=dets['COMPANY CONFORMED NAME'],
                 sic_cd=dets['SIC_CD'],
                 sim_score='{:.0f}%'.format(cs[i] * 100),
-                )
+                ))
         return top_sims
 
 
 class DescribeDesc(Resource):
     def get(self):
         top_sims = Describe().get()
-        for k, v in top_sims.items():
-            v['business_desc'] = get_desc(k)
+        for v in top_sims:
+            v['business_desc'] = get_desc(v['id'])
         return top_sims
 
 
