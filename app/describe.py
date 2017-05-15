@@ -75,7 +75,11 @@ def get_desc(id):
     from company_dets
     where id = '{}'
     """.format(id))
-    return clean_desc(cursor.fetchone()[0])
+    try:
+        return clean_desc(cursor.fetchone()[0])
+    except TypeError as e:
+        print('No description found for {}'.format(id))
+        return ''
 
 api.add_resource(Describe, '/describe')
 api.add_resource(DescribeDesc, '/describe/desc')
