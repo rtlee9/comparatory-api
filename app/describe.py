@@ -54,7 +54,7 @@ class Describe(Resource):
                 rank=rank + 1,
                 name=dets['COMPANY CONFORMED NAME'],
                 sic_cd=dets['SIC_CD'],
-                sim_score=cs[i],
+                sim_score='{:.0f}%'.format(cs[i] * 100),
                 )
         return top_sims
 
