@@ -71,7 +71,7 @@ class DescribeDesc(Resource):
 def get_desc(id):
     cursor = get_db()
     cursor.execute("""
-    select business_description
+    select raw_description
     from company_dets
     where id = '{}'
     """.format(id))
