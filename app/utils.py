@@ -36,3 +36,15 @@ def load_sparse_csr(filename):
         loader['indptr']),
         shape=loader['shape'],
     )
+
+
+def clean_name(name_raw):
+    """
+    Clean company names
+    """
+    name = name_raw.upper()
+    name = name.split('/')[0]
+    name = name.replace('&AMP;', '&')
+    name = name.replace('.', '')
+    name = name.replace(',', '')
+    return ' '.join(name.split())

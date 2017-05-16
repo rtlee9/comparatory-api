@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from flask_restful import Resource
 from urllib import urlretrieve
 import zipfile
-from utils import clean_desc, comp_case
+from utils import clean_desc, comp_case, clean_name
 
 from connect import get_db
 from app import api
@@ -53,7 +53,7 @@ class Describe(Resource):
             top_sims.append(dict(
                 id=key,
                 rank=rank + 1,
-                name=comp_case(str(dets['COMPANY CONFORMED NAME'])),
+                name=comp_case(clean_name(dets['COMPANY CONFORMED NAME'])),
                 sic_cd=str(dets['SIC_CD']),
                 sim_score='{:.0f}%'.format(cs[i] * 100),
                 ))
