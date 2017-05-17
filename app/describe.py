@@ -81,5 +81,5 @@ def get_desc(id):
         print('No description found for {}'.format(id))
         return ''
 
-api.add_resource(Describe, '/describe')
-api.add_resource(DescribeDesc, '/describe/desc')
+api.add_resource(Describe, '/companies/describe')
+api.add_resource(DescribeDesc, '/companies/describe/desc')
