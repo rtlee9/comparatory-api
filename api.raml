@@ -24,42 +24,47 @@ baseUri: https://api.comparatory.io
               example: |
                 {
                     "match": {
-                        "key": "21344_10-K_2015-02-25.txt",
+                        "id": "21344_10-K_2015-02-25.txt",
                         "name": "Coca Cola Co",
                         "sic_cd": "2080"
                     },
-                    "results": {
-                        "1418135_10-K_2015-02-19.txt": {
-                            "name": "Dr Pepper Snapple Group Inc",
-                            "rank": 3,
-                            "sic_cd": "2080",
-                            "sim_score": "77%"
-                        },
-                        "1491675_10-K_2015-02-12.txt": {
-                            "name": "Coca-cola Enterprises Inc",
-                            "rank": 2,
-                            "sic_cd": "2086",
-                            "sim_score": "80%"
-                        },
-                        "77476_10-K_2015-02-12.txt": {
-                            "name": "Pepsico Inc",
-                            "rank": 5,
-                            "sic_cd": "2080",
-                            "sim_score": "75%"
-                        },
-                        "865752_10-K_2015-03-02.txt": {
+                    "results": [
+                        {
+                            "id": "865752_10-K_2015-03-02.txt",
                             "name": "Monster Beverage Corp",
                             "rank": 1,
                             "sic_cd": "2086",
                             "sim_score": "80%"
                         },
-                        "884713_10-K_2015-03-04.txt": {
+                        {
+                            "id": "1491675_10-K_2015-02-12.txt",
+                            "name": "Coca-cola Enterprises Inc",
+                            "rank": 2,
+                            "sic_cd": "2086",
+                            "sim_score": "80%"
+                        },
+                        {
+                            "id": "1418135_10-K_2015-02-19.txt",
+                            "name": "Dr Pepper Snapple Group Inc",
+                            "rank": 3,
+                            "sic_cd": "2080",
+                            "sim_score": "77%"
+                        },
+                        {
+                            "id": "884713_10-K_2015-03-04.txt",
                             "name": "Cott Corp",
                             "rank": 4,
                             "sic_cd": "2086",
                             "sim_score": "75%"
+                        },
+                        {
+                            "id": "77476_10-K_2015-02-12.txt",
+                            "name": "Pepsico Inc",
+                            "rank": 5,
+                            "sic_cd": "2080",
+                            "sim_score": "75%"
                         }
-                    }
+                    ]
                 }
         400:
           description: Company not found

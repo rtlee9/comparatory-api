@@ -3,16 +3,7 @@ from flask_restful import Resource
 
 from app import api
 from connect import get_db, get_es
-from utils import decomp_case, comp_case, clean_desc
-
-
-class SimilarCompanies(Resource):
-    def get(self):
-        top_sims, match, target, results, sim_ids = get_sim_results()
-        return {
-            'match': dict(key=target, data=match),
-            'results': dict(keys=sim_ids, data=results),
-        }
+from utils import decomp_case, comp_case, clean_desc, get_desc
 
 
 class CompaniesPeers(Resource):
@@ -22,11 +13,22 @@ class CompaniesPeers(Resource):
         for v in results.values():
             v.pop('business_desc')
         return {
-            'match': dict(key=target, **match),
-            'results': {
-                sim_ids[k - 1]: dict(rank=k, **v) for k, v in results.items()
-            },
+            'match': dict(id=target, **match),
+            'results': [
+                dict(rank=k, id=sim_ids[k - 1], **v)
+                for k, v in results.items()
+            ],
         }
+
+
+class CompaniesPeersDesc(Resource):
+    def get(self):
+        response = CompaniesPeers().get()
+        match = response['match']
+        match['business_desc'] = get_desc(match['id'])
+        for v in response['results']:
+            v['business_desc'] = get_desc(v['id'])
+        return response
 
 
 def get_top_sims():
@@ -117,5 +119,5 @@ def get_sim_results():
     results, sim_ids = parse_sims(top_sims)
     return top_sims, match, target, results, sim_ids
 
-api.add_resource(SimilarCompanies, '/sim')
 api.add_resource(CompaniesPeers, '/companies/peers')
+api.add_resource(CompaniesPeersDesc, '/companies/peers/desc')

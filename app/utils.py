@@ -2,6 +2,8 @@ import re
 import numpy as np
 from scipy.sparse import csr_matrix
 
+from connect import get_db
+
 
 def comp_case(name):
     return " ".join(w.capitalize() for w in name.split())
@@ -48,3 +50,17 @@ def clean_name(name_raw):
     name = name.replace('.', '')
     name = name.replace(',', '')
     return ' '.join(name.split())
+
+
+def get_desc(id):
+    cursor = get_db()
+    cursor.execute("""
+    select raw_description
+    from company_dets
+    where id = '{}'
+    """.format(id))
+    try:
+        return clean_desc(cursor.fetchone()[0])
+    except TypeError as e:
+        print('No description found for {}'.format(id))
+        return ''

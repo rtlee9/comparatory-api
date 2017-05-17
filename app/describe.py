@@ -7,11 +7,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from flask_restful import Resource
 from urllib import urlretrieve
 import zipfile
-from utils import clean_desc, comp_case, clean_name
 
-from connect import get_db
 from app import api
-from utils import load_sparse_csr
+from utils import load_sparse_csr, get_desc, comp_case, clean_name
 from config import path_models, path_app, path_modelzip
 
 
@@ -66,20 +64,6 @@ class DescribeDesc(Resource):
         for v in top_sims:
             v['business_desc'] = get_desc(v['id'])
         return top_sims
-
-
-def get_desc(id):
-    cursor = get_db()
-    cursor.execute("""
-    select raw_description
-    from company_dets
-    where id = '{}'
-    """.format(id))
-    try:
-        return clean_desc(cursor.fetchone()[0])
-    except TypeError as e:
-        print('No description found for {}'.format(id))
-        return ''
 
 api.add_resource(Describe, '/companies/describe')
 api.add_resource(DescribeDesc, '/companies/describe/desc')
