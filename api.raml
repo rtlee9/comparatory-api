@@ -4,64 +4,121 @@ description: API to identify similar companies
 version: v1
 baseUri: http://api.comparatory.io
 
-/companies/peers:
-  description: Resource to identify similar companies
-  get:
-    description: "Get list of similar companies"
-    queryParameters:
-      company-name:
-        displayName: "Company name"
-        type: string
-        description: "A company's business name"
-        required: true
-        example: "Pepsico Inc"
-    responses:
-      200:
-        description: Company found, similar companies identified
-        body:
-          application/json:
-            example: |
-              {
-                  "match": {
-                      "key": "21344_10-K_2015-02-25.txt",
-                      "name": "Coca Cola Co",
-                      "sic_cd": "2080"
-                  },
-                  "results": {
-                      "1418135_10-K_2015-02-19.txt": {
-                          "name": "Dr Pepper Snapple Group Inc",
-                          "rank": 3,
-                          "sic_cd": "2080",
-                          "sim_score": "77%"
-                      },
-                      "1491675_10-K_2015-02-12.txt": {
-                          "name": "Coca-cola Enterprises Inc",
-                          "rank": 2,
-                          "sic_cd": "2086",
-                          "sim_score": "80%"
-                      },
-                      "77476_10-K_2015-02-12.txt": {
-                          "name": "Pepsico Inc",
-                          "rank": 5,
-                          "sic_cd": "2080",
-                          "sim_score": "75%"
-                      },
-                      "865752_10-K_2015-03-02.txt": {
-                          "name": "Monster Beverage Corp",
-                          "rank": 1,
-                          "sic_cd": "2086",
-                          "sim_score": "80%"
-                      },
-                      "884713_10-K_2015-03-04.txt": {
-                          "name": "Cott Corp",
-                          "rank": 4,
-                          "sic_cd": "2086",
-                          "sim_score": "75%"
-                      }
-                  }
-              }
-      400:
-        description: Company not found
+/companies:
+  /peers:
+    description: Resource to identify similar companies
+    get:
+      description: "Get list of similar companies"
+      queryParameters:
+        company-name:
+          displayName: "Company name"
+          type: string
+          description: "A company's business name"
+          required: true
+          example: "Pepsico Inc"
+      responses:
+        200:
+          description: Company found, similar companies identified
+          body:
+            application/json:
+              example: |
+                {
+                    "match": {
+                        "key": "21344_10-K_2015-02-25.txt",
+                        "name": "Coca Cola Co",
+                        "sic_cd": "2080"
+                    },
+                    "results": {
+                        "1418135_10-K_2015-02-19.txt": {
+                            "name": "Dr Pepper Snapple Group Inc",
+                            "rank": 3,
+                            "sic_cd": "2080",
+                            "sim_score": "77%"
+                        },
+                        "1491675_10-K_2015-02-12.txt": {
+                            "name": "Coca-cola Enterprises Inc",
+                            "rank": 2,
+                            "sic_cd": "2086",
+                            "sim_score": "80%"
+                        },
+                        "77476_10-K_2015-02-12.txt": {
+                            "name": "Pepsico Inc",
+                            "rank": 5,
+                            "sic_cd": "2080",
+                            "sim_score": "75%"
+                        },
+                        "865752_10-K_2015-03-02.txt": {
+                            "name": "Monster Beverage Corp",
+                            "rank": 1,
+                            "sic_cd": "2086",
+                            "sim_score": "80%"
+                        },
+                        "884713_10-K_2015-03-04.txt": {
+                            "name": "Cott Corp",
+                            "rank": 4,
+                            "sic_cd": "2086",
+                            "sim_score": "75%"
+                        }
+                    }
+                }
+        400:
+          description: Company not found
+  /describe:
+    description: Resource to identify companies matching a description
+    get:
+      description: "Get list of companies matching a description"
+      queryParameters:
+        company-name:
+          displayName: "Company description"
+          type: string
+          description: "Description of a company's business operations"
+          required: true
+          example: "Jeans retailer"
+      responses:
+        200:
+          description: Matching companies identified
+          body:
+            application/json:
+              example: |
+                [
+                    {
+                        "id": "94845_10-K_2015-02-12.txt",
+                        "name": "Levi Strauss & Co",
+                        "rank": 1,
+                        "sic_cd": "2300",
+                        "sim_score": "19%"
+                    },
+                    {
+                        "id": "844143_10-K_2015-02-13.txt",
+                        "name": "Joe's Jeans Inc",
+                        "rank": 2,
+                        "sic_cd": "2300",
+                        "sim_score": "14%"
+                    },
+                    {
+                        "id": "55785_10-K_2015-02-18.txt",
+                        "name": "Kimberly Clark Corp",
+                        "rank": 3,
+                        "sic_cd": "2670",
+                        "sim_score": "13%"
+                    },
+                    {
+                        "id": "717954_10-K_2015-10-28.txt",
+                        "name": "Unifirst Corp",
+                        "rank": 4,
+                        "sic_cd": "7200",
+                        "sim_score": "10%"
+                    },
+                    {
+                        "id": "1469510_10-K_2015-03-05.txt",
+                        "name": "Resolute Energy Corp",
+                        "rank": 5,
+                        "sic_cd": "1311",
+                        "sim_score": "9%"
+                    }
+                ]
+        400:
+          description: No matching companies found
 
 /plots:
   description: Resource for plotting companies

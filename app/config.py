@@ -1,4 +1,4 @@
-import os
+from os import path, environ
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_sslify import SSLify
@@ -11,26 +11,37 @@ def set_config(app):
 
     SSLify(app)
     Bootstrap(app)
-    app.config.from_object(os.environ['APP_SETTINGS'])
+    app.config.from_object(environ['APP_SETTINGS'])
 
     # Set up SQLAlchemy DB
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
     db = SQLAlchemy(app)
 
     # RDS credentials
-    app.config['RDS_HOST'] = os.environ['RDS_HOST']
-    app.config['RDS_USER'] = os.environ['RDS_USER']
-    app.config['RDS_PASSWORD'] = os.environ['RDS_PASSWORD']
+    app.config['RDS_HOST'] = environ['RDS_HOST']
+    app.config['RDS_USER'] = environ['RDS_USER']
+    app.config['RDS_PASSWORD'] = environ['RDS_PASSWORD']
 
     # OAuth credentials and configuration
-    app.config['SECRET_KEY'] = os.environ['STORMPATH_SECRET_KEY']
-    app.config['STORMPATH_API_KEY_ID'] = os.environ['STORMPATH_API_KEY_ID']
-    app.config['STORMPATH_API_KEY_SECRET'] = os.environ[
+    app.config['SECRET_KEY'] = environ['STORMPATH_SECRET_KEY']
+    app.config['STORMPATH_API_KEY_ID'] = environ['STORMPATH_API_KEY_ID']
+    app.config['STORMPATH_API_KEY_SECRET'] = environ[
         'STORMPATH_API_KEY_SECRET']
-    app.config['STORMPATH_APPLICATION'] = os.environ['STORMPATH_APPLICATION']
+    app.config['STORMPATH_APPLICATION'] = environ['STORMPATH_APPLICATION']
     app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
     app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
     StormpathManager(app)
 
     return db
+
+path_app = path.dirname(path.abspath(__file__))
+path_base = path.dirname(path_app)
+path_models = path.join(path_app, 'models')
+path_modelzip = 'https://storage.googleapis.com/comparatory-models/models.zip'
+
+# verify output path exists otherwise make it
+for p in [path_models]:
+    if not path.exists(p):
+        makedirs(p)
+
