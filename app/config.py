@@ -37,11 +37,8 @@ def set_config(app):
 
 path_app = path.dirname(path.abspath(__file__))
 path_base = path.dirname(path_app)
-path_models = path.join(path_app, 'models')
-path_modelzip = 'https://storage.googleapis.com/comparatory-models/models.zip'
-
-# verify output path exists otherwise make it
-for p in [path_models]:
-    if not path.exists(p):
-        makedirs(p)
-
+path_models = path.join(path_base, 'models')
+modelzip_bucket = 'comparatory'
+modelzip_filename = 'models.zip'
+AWS_SECRET_ACCESS_KEY = environ['AWS_SECRET_ACCESS_KEY']
+AWS_ACCESS_KEY_ID = environ['AWS_ACCESS_KEY_ID']
