@@ -1,9 +1,13 @@
+import pandas as pd
+import json
+from os import path
 from flask import request
 from flask_restful import Resource
 
 from app import api
 from connect import get_db, get_es
 from utils import decomp_case, comp_case, clean_desc, get_desc
+from config import path_models
 
 
 class CompaniesPeers(Resource):
@@ -119,5 +123,10 @@ def get_sim_results():
     results, sim_ids = parse_sims(top_sims)
     return top_sims, match, target, results, sim_ids
 
+
 api.add_resource(CompaniesPeers, '/companies/peers')
 api.add_resource(CompaniesPeersDesc, '/companies/peers/desc')
+similarity_scores = pd.read_pickle(
+    path.join(path_models, 'similarity_scores_df.pk'))
+with open(path.join(path_models, 'company_profiles.json'), 'r') as f:
+    company_profiles = json.load(f)
