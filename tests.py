@@ -8,7 +8,7 @@ class TestCase(unittest.TestCase):
         self.app = app.test_client()
 
     def test_peers_200(self):
-        r = self.app.get('/companies/peers?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers?ticker=KO')
         self.assertEqual(r.status_code, 200)
 
     def test_peers_desc_200(self):
@@ -22,28 +22,24 @@ class TestCase(unittest.TestCase):
             self.assertIn('business_desc', sim)
 
     def test_peers_response_length(self):
-        r = self.app.get('/companies/peers?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers?ticker=KO')
         body = json.loads(r.get_data())
         self.assertEqual(len(body), 2)
 
     def test_peers_keys(self):
-        r = self.app.get('/companies/peers?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers?ticker=KO')
         body = json.loads(r.get_data())
         self.assertListEqual(body.keys(), ['results', 'match'])
 
     def test_match(self):
-        r = self.app.get('/companies/peers?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers?ticker=KO')
         body = json.loads(r.get_data())
         self.assertDictEqual(
             body['match'],
-            {
-                u'sic_cd': u'2080',
-                u'id': u'21344_10-K_2015-02-25.txt',
-                u'name': u'Coca Cola Co',
-            })
+            {'id': u'KO', 'name': u'The Coca-Cola Company (KO)'})
 
     def test_peers_results_length(self):
-        r = self.app.get('/companies/peers?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers?ticker=KO')
         body = json.loads(r.get_data())
         self.assertEqual(len(body['results']), 5)
 
