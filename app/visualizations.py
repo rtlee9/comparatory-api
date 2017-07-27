@@ -1,4 +1,6 @@
 import pandas as pd
+from config import path_models
+from os import path
 from flask_restful import Resource
 
 import matplotlib as mpl
@@ -7,7 +9,6 @@ from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 
 from app import api
-from connect import get_db
 from utils import comp_case
 
 
@@ -22,14 +23,7 @@ class Plots(Resource):
 
 
 def get_scatter_data():
-    cursor = get_db()
-    cursor.execute(
-        'select E.X1, E.X2, C.sic_cd, C.name, C.id '
-        'from embedded E '
-        'inner join company_dets C on E.id = C.id')
-    SNE_vecs = cursor.fetchall()
-    colnames = [desc[0] for desc in cursor.description]
-    return pd.DataFrame(SNE_vecs, columns=colnames)
+    return scatter_data
 
 
 def get_scatter(target=None, sim_ids=None):
@@ -121,5 +115,6 @@ def get_scatter(target=None, sim_ids=None):
     return plot
 
 
+scatter_data = pd.read_pickle(path.join(path_models, 'scatter_data.pk'))
 api.add_resource(PlotData, '/plot')
 api.add_resource(Plots, '/plots')
