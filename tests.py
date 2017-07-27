@@ -12,11 +12,11 @@ class TestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
 
     def test_peers_desc_200(self):
-        r = self.app.get('/companies/peers/desc?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers/desc?ticker=KO')
         self.assertEqual(r.status_code, 200)
 
     def test_peers_desc_has_desc(self):
-        r = self.app.get('/companies/peers/desc?company-name=Coca Cola Co')
+        r = self.app.get('/companies/peers/desc?ticker=KO')
         body = json.loads(r.get_data())
         for sim in body['results']:
             self.assertIn('business_desc', sim)

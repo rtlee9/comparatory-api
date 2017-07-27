@@ -14,6 +14,11 @@ class CompaniesPeers(Resource):
 class CompaniesPeersDesc(Resource):
     def get(self):
         response = CompaniesPeers().get()
+        response['results'] = [
+            dict(
+                result,
+                business_desc=company_profiles[result['id']].get('description'))
+            for result in response['results']]
         return response
 
 
