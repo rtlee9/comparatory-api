@@ -66,6 +66,40 @@ class TestCase(unittest.TestCase):
         body = json.loads(r.get_data())
         self.assertGreaterEqual(len(body), 50)
 
+    def test_describe_200(self):
+        r = self.app.get('/companies/describe/desc?description=jeans retailer')
+        self.assertEqual(r.status_code, 200)
+
+    def test_describe_response_length(self):
+        r = self.app.get('/companies/describe/desc?description=jeans retailer')
+        body = json.loads(r.get_data())
+        self.assertEqual(len(body), 5)
+
+    def test_describe_response_keys(self):
+        r = self.app.get('/companies/describe/desc?description=jeans retailer')
+        body = json.loads(r.get_data())
+        for hit in body:
+            self.assertListEqual(
+                hit.keys(),
+                [u'sim_score', u'business_desc', u'id', u'rank', u'name'])
+
+    def test_desc_200(self):
+        r = self.app.get('/companies/describe?description=jeans retailer')
+        self.assertEqual(r.status_code, 200)
+
+    def test_desc_response_length(self):
+        r = self.app.get('/companies/describe?description=jeans retailer')
+        body = json.loads(r.get_data())
+        self.assertEqual(len(body), 5)
+
+    def test_desc_response_keys(self):
+        r = self.app.get('/companies/describe?description=jeans retailer')
+        body = json.loads(r.get_data())
+        for hit in body:
+            self.assertListEqual(
+                hit.keys(),
+                [u'sim_score', u'id', u'rank', u'name'])
+
 
 if __name__ == '__main__':
     unittest.main()
