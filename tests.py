@@ -15,6 +15,11 @@ class TestCase(unittest.TestCase):
         r = self.app.get('/companies/peers/desc?ticker=KO')
         self.assertEqual(r.status_code, 200)
 
+    def test_peers_match_hasno_desc(self):
+        r = self.app.get('/companies/peers?ticker=KO')
+        body = json.loads(r.get_data())
+        self.assertNotIn('business_desc', body['match'])
+
     def test_peers_desc_match_has_desc(self):
         r = self.app.get('/companies/peers/desc?ticker=KO')
         body = json.loads(r.get_data())

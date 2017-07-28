@@ -13,7 +13,7 @@ class CompaniesPeers(Resource):
 
 class CompaniesPeersDesc(Resource):
     def get(self):
-        response = CompaniesPeers().get()
+        response = dict(CompaniesPeers().get())
         response['match'] = dict(
             response['match'],
             business_desc=company_profiles[response['match']['id']].get('description'))
