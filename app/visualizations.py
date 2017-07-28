@@ -9,8 +9,6 @@ from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool
 
 from app import api
-from utils import comp_case
-
 
 class PlotData(Resource):
     def get(self):
@@ -68,7 +66,7 @@ def get_scatter(target=None, sim_ids=None):
             x=list(vecs['x1']),
             y=list(vecs['x2']),
             desc=list(vecs['sic_cd']),
-            name=list([comp_case(v) for v in vecs['name']]),
+            name=list([v for v in vecs['name']]),
         )
     )
 
