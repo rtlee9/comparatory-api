@@ -1,6 +1,6 @@
 import boto
 import zipfile
-from os import path
+from os import path, remove
 import config
 
 
@@ -20,6 +20,7 @@ def extract_flat():
     path_unzip = path.join(config.path_base, config.modelzip_filename)
     download_modelzip(path_unzip)
     unzip_model(path_unzip)
+    remove(path_unzip)
 
 
 if __name__ == '__main__':
