@@ -5,7 +5,7 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    DEBUG = False
+    DEBUG = True
     S3_DOWNLOAD = True
 
 
