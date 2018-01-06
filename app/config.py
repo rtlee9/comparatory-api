@@ -2,7 +2,6 @@ from os import path, environ
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_sslify import SSLify
-from flask_stormpath import StormpathManager
 
 
 def set_config(app):
@@ -22,16 +21,6 @@ def set_config(app):
     app.config['RDS_HOST'] = environ['RDS_HOST']
     app.config['RDS_USER'] = environ['RDS_USER']
     app.config['RDS_PASSWORD'] = environ['RDS_PASSWORD']
-
-    # OAuth credentials and configuration
-    app.config['SECRET_KEY'] = environ['STORMPATH_SECRET_KEY']
-    app.config['STORMPATH_API_KEY_ID'] = environ['STORMPATH_API_KEY_ID']
-    app.config['STORMPATH_API_KEY_SECRET'] = environ[
-        'STORMPATH_API_KEY_SECRET']
-    app.config['STORMPATH_APPLICATION'] = environ['STORMPATH_APPLICATION']
-    app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
-    app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
-    StormpathManager(app)
 
     return db
 
