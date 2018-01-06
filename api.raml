@@ -11,11 +11,11 @@ baseUri: https://api.comparatory.io
       description: "Get list of similar companies"
       queryParameters:
         company-name:
-          displayName: "Company name"
+          displayName: "Company name or ticker"
           type: string
-          description: "A company's business name"
+          description: "A company's business name or stock ticker"
           required: true
-          example: "Coca Cola Co"
+          example: "Delta Air Lines"
       responses:
         200:
           description: Company found, similar companies identified
@@ -24,45 +24,44 @@ baseUri: https://api.comparatory.io
               example: |
                 {
                     "match": {
-                        "id": "21344_10-K_2015-02-25.txt",
-                        "name": "Coca Cola Co",
-                        "sic_cd": "2080"
+                        "id": "DAL",
+                        "name": "Delta Air Lines, Inc. (DAL)"
                     },
                     "results": [
                         {
-                            "id": "865752_10-K_2015-03-02.txt",
-                            "name": "Monster Beverage Corp",
+                            "id": "JBLU",
+                            "name": "JetBlue Airways Corporation (JBLU)",
                             "rank": 1,
-                            "sic_cd": "2086",
-                            "sim_score": "80%"
+                            "sic_cd": "0000",
+                            "sim_score": 0.85
                         },
                         {
-                            "id": "1491675_10-K_2015-02-12.txt",
-                            "name": "Coca-cola Enterprises Inc",
+                            "id": "ALK",
+                            "name": "Alaska Air Group, Inc. (ALK)",
                             "rank": 2,
-                            "sic_cd": "2086",
-                            "sim_score": "80%"
+                            "sic_cd": "0000",
+                            "sim_score": 0.83
                         },
                         {
-                            "id": "1418135_10-K_2015-02-19.txt",
-                            "name": "Dr Pepper Snapple Group Inc",
+                            "id": "ALGT",
+                            "name": "Allegiant Travel Company (ALGT)",
                             "rank": 3,
-                            "sic_cd": "2080",
-                            "sim_score": "77%"
+                            "sic_cd": "0000",
+                            "sim_score": 0.83
                         },
                         {
-                            "id": "884713_10-K_2015-03-04.txt",
-                            "name": "Cott Corp",
+                            "id": "SAVE",
+                            "name": "Spirit Airlines, Inc. (SAVE)",
                             "rank": 4,
-                            "sic_cd": "2086",
-                            "sim_score": "75%"
+                            "sic_cd": "0000",
+                            "sim_score": 0.78
                         },
                         {
-                            "id": "77476_10-K_2015-02-12.txt",
-                            "name": "Pepsico Inc",
+                            "id": "LUV",
+                            "name": "Southwest Airlines Co. (LUV)",
                             "rank": 5,
-                            "sic_cd": "2080",
-                            "sim_score": "75%"
+                            "sic_cd": "0000",
+                            "sim_score": 0.71
                         }
                     ]
                 }
@@ -73,12 +72,12 @@ baseUri: https://api.comparatory.io
     get:
       description: "Get list of companies matching a description"
       queryParameters:
-        company-name:
+        description:
           displayName: "Company description"
           type: string
           description: "Description of a company's business operations"
           required: true
-          example: "Jeans retailer"
+          example: "mobile phone manufacturer"
       responses:
         200:
           description: Matching companies identified
@@ -87,39 +86,34 @@ baseUri: https://api.comparatory.io
               example: |
                 [
                     {
-                        "id": "94845_10-K_2015-02-12.txt",
-                        "name": "Levi Strauss & Co",
+                        "id": "ABIL",
+                        "name": "Ability Inc. (ABIL)",
                         "rank": 1,
-                        "sic_cd": "2300",
-                        "sim_score": "19%"
+                        "sim_score": 0.45824572
                     },
                     {
-                        "id": "844143_10-K_2015-02-13.txt",
-                        "name": "Joe's Jeans Inc",
+                        "id": "ATV",
+                        "name": "Acorn International, Inc. (ATV)",
                         "rank": 2,
-                        "sic_cd": "2300",
-                        "sim_score": "14%"
+                        "sim_score": 0.31028354
                     },
                     {
-                        "id": "55785_10-K_2015-02-18.txt",
-                        "name": "Kimberly Clark Corp",
+                        "id": "CNTF",
+                        "name": "China Techfaith Wireless Communication Technology Limited (CNTF)",
                         "rank": 3,
-                        "sic_cd": "2670",
-                        "sim_score": "13%"
+                        "sim_score": 0.2986524
                     },
                     {
-                        "id": "717954_10-K_2015-10-28.txt",
-                        "name": "Unifirst Corp",
+                        "id": "STM",
+                        "name": "STMicroelectronics N.V. (STM)",
                         "rank": 4,
-                        "sic_cd": "7200",
-                        "sim_score": "10%"
+                        "sim_score": 0.25856966
                     },
                     {
-                        "id": "1469510_10-K_2015-03-05.txt",
-                        "name": "Resolute Energy Corp",
+                        "id": "VOXX",
+                        "name": "VOXX International Corporation (VOXX)",
                         "rank": 5,
-                        "sic_cd": "1311",
-                        "sim_score": "9%"
+                        "sim_score": 0.24855646
                     }
                 ]
         400:
@@ -136,80 +130,45 @@ baseUri: https://api.comparatory.io
             example: |
               [
                   {
-                      "id": "38725_10-K_2015-03-04.txt",
-                      "name": "FRANKLIN ELECTRIC CO INC",
-                      "sic_cd": "3621",
-                      "x1": 3.69243,
-                      "x2": 0.188216
+                      "id": "NICK",
+                      "name": "Nicholas Financial, Inc. (NICK)",
+                      "sic_cd": "6153",
+                      "x1": 10.03778997871596,
+                      "x2": -7.20429410029356
                   },
                   {
-                      "id": "1444598_10-K_2015-03-16.txt",
-                      "name": "EMDEON INC",
-                      "sic_cd": "7389",
-                      "x1": -7.35893,
-                      "x2": 1.82336
+                      "id": "MFIN",
+                      "name": "Medallion Financial Corp. (MFIN)",
+                      "sic_cd": "6199",
+                      "x1": -3.2277884423503655,
+                      "x2": 10.222132107613794
                   },
                   {
-                      "id": "860413_10-K_2015-03-02.txt",
-                      "name": "FIRST INTERSTATE BANCSYSTEM INC",
-                      "sic_cd": "6022",
-                      "x1": -4.3126,
-                      "x2": 10.5318
+                      "id": "CLB",
+                      "name": "Core Laboratories N.V. (CLB)",
+                      "sic_cd": "1389",
+                      "x1": 2.655370211307824,
+                      "x2": 0.881550273090461
                   },
                   {
-                      "id": "1453001_10-K_2015-04-15.txt",
-                      "name": "VACCINOGEN INC",
-                      "sic_cd": "2834",
-                      "x1": -6.38592,
-                      "x2": -6.59124
-                  },
-                  {
-                      "id": "1022469_10-K_2015-03-03.txt",
-                      "name": "DELTIC TIMBER CORP",
-                      "sic_cd": "2421",
-                      "x1": 6.70578,
-                      "x2": 4.76582
-                  },
-                  {
-                      "id": "1328571_10-K_2015-02-26.txt",
-                      "name": "NTELOS HOLDINGS CORP",
-                      "sic_cd": "4813",
-                      "x1": -0.966837,
-                      "x2": 2.43435
-                  },
-                  {
-                      "id": "1563756_10-K_2015-03-31.txt",
-                      "name": "LIGHTSTONE VALUE PLUS REAL ESTATE INVESTMENT TRUST III INC",
+                      "id": "IMH",
+                      "name": "Impac Mortgage Holdings, Inc. (IMH)",
                       "sic_cd": "6798",
-                      "x1": 5.14768,
-                      "x2": 8.67505
+                      "x1": 2.7931390871227206,
+                      "x2": 4.00836380157074
                   },
                   {
-                      "id": "79958_10-K_2015-05-28.txt",
-                      "name": "PRECISION CASTPARTS CORP",
-                      "sic_cd": "3320",
-                      "x1": 1.95168,
-                      "x2": 0.426964
+                      "id": "BDR",
+                      "name": "Blonder Tongue Laboratories, Inc. (BDR)",
+                      "sic_cd": "3663",
+                      "x1": 0.7598519737117487,
+                      "x2": -0.3461153133448682
                   },
                   {
-                      "id": "1068717_10-K_2015-02-26.txt",
-                      "name": "RTI INTERNATIONAL METALS INC",
-                      "sic_cd": "3350",
-                      "x1": 2.82072,
-                      "x2": 0.379765
-                  },
-                  {
-                      "id": "1407583_10-K_2015-09-28.txt",
-                      "name": "LIBERTY SILVER CORP",
-                      "sic_cd": "1000",
-                      "x1": 10.4744,
-                      "x2": 0.0549198
-                  },
-                  {
-                      "id": "1133421_10-K_2015-02-02.txt",
-                      "name": "NORTHROP GRUMMAN CORP",
-                      "sic_cd": "3812",
-                      "x1": -1.43065,
-                      "x2": -0.0599472
+                      "id": "NVAX",
+                      "name": "Novavax, Inc. (NVAX)",
+                      "sic_cd": "2836",
+                      "x1": -7.001517611339916,
+                      "x2": 6.474902899599258
                   }
               ]

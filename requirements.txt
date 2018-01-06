@@ -6,11 +6,8 @@ Flask_SSLify==0.1.5
 Flask_Stormpath==0.4.8
 matplotlib==1.5.3
 pandas==0.18.1
-psycopg2==2.6.2
 requests_aws4auth==0.9
 bokeh==0.12.2
 gunicorn==19.6.0
 Flask-RESTful==0.3.5
-scipy==0.18.1
-scikit-learn==0.18.1
 boto==2.45.0
