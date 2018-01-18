@@ -12,3 +12,6 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
+
+path_data = 'data'
+path_es = 'elasticsearch'
