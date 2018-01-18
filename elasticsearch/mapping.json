@@ -1,0 +1,9 @@
+{
+	"properties": {
+		"NAME": {
+			"type": "string",
+			"analyzer": "autocomplete",
+			"search_analyzer": "standard"
+		}
+	}
+}
